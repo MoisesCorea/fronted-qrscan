@@ -1,0 +1,115 @@
+<div style="margin-left: auto; margin-right: auto">
+  <p id="registerFeedback"></p>
+</div>
+<div>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center">Registro de Administradores</h1>
+      <form class="form mx-3" [formGroup]="adminForm" (ngSubmit)="saveAdmin()">
+        <div class="mb-2">
+          <label class="form-label" for="name">Nombre: </label>
+          <input class="form-control" type="text" [formControl]="name" />
+          <div
+            *ngIf="name.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="name.errors.required">El nombre es requerido</div>
+            <div *ngIf="name.errors.minlength">
+              El nombre debe tener el menos 5 caracteres
+            </div>
+            <div *ngIf="name.errors.maxlength">
+              El nombre debe tener una longitud máxima de 255 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label" for="lastName">Apellido: </label>
+          <input class="form-control" type="text" [formControl]="last_name" />
+          <div
+            *ngIf="last_name.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="last_name.errors.required">
+              el apellido is requerido
+            </div>
+            <div *ngIf="last_name.errors.minlength">
+              El Apellido debe tener el menos 5 caracteres
+            </div>
+            <div *ngIf="last_name.errors.maxlength">
+              El Apellido debe tener una longitud máxima de 255 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label" for="email">Email: </label>
+          <input class="form-control" type="email" [formControl]="email" />
+          <div
+            *ngIf="email.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="email.errors.required">El email es requerido</div>
+            <div *ngIf="email.errors.pattern">
+              El email no tiene un formato valido.
+            </div>
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label" for="alias">Alias: </label>
+          <input class="form-control" type="text" [formControl]="alias" />
+          <div
+            *ngIf="alias.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="alias.errors.required">Alias es requerido</div>
+            <div *ngIf="alias.errors.minlength">
+              El alias debe tener al menos 5 caracteres de longitud.
+            </div>
+            <div *ngIf="alias.errors.maxlength">
+              El alias debe tener una longitud máxima de 25 caracteres
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label" for="password">Contraseña: </label>
+          <input
+            class="form-control"
+            type="password"
+            [formControl]="password"
+          />
+          <div
+            *ngIf="password.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="password.errors.required">
+              La contraseña es requerida
+            </div>
+            <div *ngIf="password.errors.minlength">
+              La contraseña debe tener al menos 8 caracteres
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label" for="roles">Rol de usuario:</label>
+          <select class="form-control" [formControl]="roles" required>
+            <option [ngValue]="null" selected>-- Seleccionar --</option>
+            <option *ngFor="let rol of rolesList" [ngValue]="rol.id">
+              {{ rol.name }}
+            </option>
+          </select>
+          <div
+            *ngIf="roles.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="roles.errors.required">
+              Selecciona un rol de usuario
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary mt-4" type="submit">Register</button>
+      </form>
+    </div>
+  </div>
+</div>

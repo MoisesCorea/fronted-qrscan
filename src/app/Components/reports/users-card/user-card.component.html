@@ -1,0 +1,35 @@
+<div class="container-cards mb-5">
+  <h2 class="text-center mb-5">Carnet de usuario</h2>
+
+  <div class="form-group mt-5 mb-5 col-md">
+    <input
+      type="text"
+      class="forms-control"
+      placeholder="Buscar.."
+      [(ngModel)]="filterInput"
+      name="filterpost"
+      class="forms-control"
+      placeholder="Buscar.."
+    />
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+    <div
+      class="col"
+      *ngFor="
+        let user of users
+          | filter : filterInput
+          | paginate : { itemsPerPage: 3, currentPage: page }
+      "
+    >
+      <app-card [item]="convertToCardDTO(user)"></app-card>
+    </div>
+  </div>
+
+  <pagination-controls
+    class="text-center mb-5 mt-5"
+    (pageChange)="page = $event"
+    previousLabel="Aterior"
+    nextLabel="Siguiente"
+  ></pagination-controls>
+</div>

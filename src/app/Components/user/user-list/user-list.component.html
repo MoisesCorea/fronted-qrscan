@@ -1,0 +1,86 @@
+<div class="row mt-5 justify-content-center">
+  <div class="col-md-11 mx-5">
+    <div class="table-responsive mx-3">
+      <h2 class="text-center">Lista de usuarios</h2>
+      <button class="btn btn-primary addBtn" (click)="createUser()">
+        AGREGAR <i class="fa-solid fa-plus"></i>
+      </button>
+
+      <div class="form-group mt-5 col-md">
+        <input
+          type="text"
+          class="forms-control"
+          placeholder="Buscar.."
+          [(ngModel)]="filterInput"
+          name="filterpost"
+          class="forms-control"
+          placeholder="Buscar.."
+        />
+      </div>
+
+      <table class="table">
+        <thead class="table-light">
+          <tr>
+            <TH>IMAGEN DE PERFIL</TH>
+            <th>NOMBRE</th>
+            <th>APELLIDO</th>
+            <th>EDAD</th>
+            <th>GÉNERO</th>
+            <th>CORREO</th>
+            <th>DIRECCIÓN</th>
+            <th>TELÉFONO</th>
+            <th>HORARIO</th>
+            <th>ISNTANCIA</th>
+            <TH>ESTADO</TH>
+            <TH> ACCIONES</TH>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let user of users
+                | filter : filterInput
+                | paginate : { itemsPerPage: 5, currentPage: page }
+            "
+          >
+            <td>
+              <a [routerLink]="['/carnets', user.id]">
+                <img
+                  src="{{ user.profile_image }}"
+                  width="120"
+                  height="100"
+                  alt=""
+                />
+              </a>
+            </td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.gender }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.phone_number }}</td>
+            <td>{{ getShiftName(user.shift_id) | async }}</td>
+            <td>{{ getDepartmentName(user.department_id) | async }}</td>
+            <td>{{ user.status }}</td>
+
+            <td>
+              <button class="btn btn-success" (click)="updateUser(user.id)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger" (click)="deleteUser(user.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls
+      class="text-center mb-5 mt-5"
+      (pageChange)="page = $event"
+      previousLabel="Aterior"
+      nextLabel="Siguiente"
+    ></pagination-controls>
+  </div>
+</div>

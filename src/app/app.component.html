@@ -1,0 +1,149 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
+    <mat-icon
+      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+      >menu</mat-icon
+    >
+  </button>
+
+  <span class="example-spacer"></span>
+  <button mat-button [matMenuTriggerFor]="menu">
+    {{
+      (headerMenusService.headerManagement | async)?.showNoAuthSection
+        ? "Inicie sesión"
+        : "Perfil"
+    }}
+  </button>
+  <mat-menu #menu="matMenu">
+    <button
+      mat-menu-item
+      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+      (click)="logout()"
+    >
+      <span>Cerrar sesión</span>
+    </button>
+    <button
+      mat-menu-item
+      *ngIf="(headerMenusService.headerManagement | async)?.showNoAuthSection"
+      (click)="login()"
+    >
+      <span>Iniciar sesión</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<mat-sidenav-container autosize>
+  <mat-sidenav
+    *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+    [ngClass]="!isCollapsed ? 'expanded' : ''"
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="isMobile ? 'false' : 'true'"
+  >
+    <mat-nav-list>
+      <!-- NO AUTH REQUIRED -->
+      <div
+        *ngIf="(headerMenusService.headerManagement | async)?.showNoAuthSection"
+      ></div>
+      <!-- AUTH REQUIRED -->
+      <div
+        *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+      >
+        <a
+          *ngIf="userRolIn(['Admin-1', 'Admin', 'Admin-2']) === true"
+          mat-list-item
+          [routerLink]="['/dashboard']"
+        >
+          <span class="entry">
+            <i class="fa-solid fa-gauge"></i>
+            <span>Dashboard</span>
+          </span>
+        </a>
+        <a
+          *ngIf="userRolIn(['Admin-1', 'Admin']) === true"
+          mat-list-item
+          [routerLink]="['/usuarios']"
+        >
+          <span class="entry">
+            <i class="fa-solid fa-user"></i>
+            <span>Usuarios</span>
+          </span>
+        </a>
+        <a
+          *ngIf="userRolIn(['Admin-1', 'Admin']) === true"
+          mat-list-item
+          [routerLink]="['/departamentos']"
+        >
+          <span class="entry">
+            <i class="fa-solid fa-building-user"></i>
+            <span>Departamentos</span>
+          </span>
+        </a>
+        <a
+          *ngIf="userRolIn(['Admin-1', 'Admin']) === true"
+          mat-list-item
+          [routerLink]="['/eventos']"
+        >
+          <span class="entry">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Eventos</span>
+          </span>
+        </a>
+        <a *ngIf="userRolIn(['Admin-1', 'Admin']) === true" mat-list-item>
+          <span class="entry" [routerLink]="['/turnos']">
+            <i class="fa-solid fa-clock"></i>
+            <span>Horarios</span>
+          </span>
+        </a>
+        <a
+          *ngIf="userRolIn(['Admin']) === true"
+          mat-list-item
+          [routerLink]="['/roles']"
+        >
+          <span class="entry">
+            <i class="fa-solid fa-users-rectangle"></i>
+            <span>Roles</span>
+          </span>
+        </a>
+        <a
+          *ngIf="userRolIn(['Admin']) === true"
+          mat-list-item
+          [routerLink]="['/admins']"
+        >
+          <span class="entry">
+            <i class="fa-brands fa-black-tie"></i>
+            <span>Administradores</span>
+          </span>
+        </a>
+        <a
+          mat-list-item
+          [matMenuTriggerFor]="menu"
+          *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
+        >
+          <span class="entry">
+            <i class="fa-solid fa-file-circle-check"></i>
+            <span>Reportes</span>
+          </span>
+        </a>
+        <mat-menu #menu="matMenu">
+          <a
+            mat-menu-item
+            *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
+            [routerLink]="['/carnets']"
+          >
+            <span>Carnets de usuario</span>
+          </a>
+          <a
+            mat-menu-item
+            *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
+            [routerLink]="['reporte/usuario']"
+          >
+            <span>Reporte de usuario</span>
+          </a>
+        </mat-menu>
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

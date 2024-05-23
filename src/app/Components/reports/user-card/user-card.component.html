@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-6 container-card mt-6">
+    <div class="card">
+      <figure>
+        <img class="card-img-top" [src]="user.profile_image" alt="" />
+      </figure>
+      <div class="card-body">
+        <div class="text-center">
+          <b>{{ user.name }} {{ user.last_name }}</b>
+        </div>
+        <div class="text-center">
+          {{ getDepartmentName(user.department_id) | async }}
+        </div>
+        <figure style="text-align: center">
+          <img [src]="user.qr_image" alt="" width="150" height="150" />
+        </figure>
+      </div>
+    </div>
+  </div>
+</div>

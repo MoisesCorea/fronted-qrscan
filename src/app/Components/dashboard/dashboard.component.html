@@ -1,0 +1,62 @@
+<div *ngIf="reportData" class="container mt-5">
+  <h3>Asistencia Diaria</h3>
+  <div class="form-group mt-5">
+    <input
+      type="text"
+      class="forms-control"
+      placeholder="Buscar.."
+      [(ngModel)]="filterInput"
+      name="filterpost"
+      class="forms-control"
+      placeholder="Buscar.."
+    />
+  </div>
+
+  <table class="table table-bordered mb-5">
+    <thead class="thead-light">
+      <tr>
+        <th>Fecha</th>
+        <th>Usuario</th>
+        <th>Hora de entrada</th>
+        <th>Hora de salida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="
+          let attendance of reportData.attendance
+            | filterDashboard : filterInput
+            | paginate : { itemsPerPage: 5, currentPage: page }
+        "
+      >
+        <td>{{ attendance.attendance_date }}</td>
+        <td>{{ attendance.user_name }}</td>
+        <td>{{ attendance.entry_time }}</td>
+        <td>{{ attendance.finish_time }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls
+    class="text-center mb-5 mt-5"
+    (pageChange)="page = $event"
+    previousLabel="Aterior"
+    nextLabel="Siguiente"
+  ></pagination-controls>
+
+  <div class="row mt-5 mb-5">
+    <canvasjs-chart
+      class="col-md-6"
+      [options]="
+        chartPie(reportData.total_records, reportData.active_users_count)
+      "
+      [styles]="{ width: '100%', height: '360px' }"
+    ></canvasjs-chart>
+    <canvasjs-chart
+      class="col-md-6"
+      [options]="
+        chartBar(reportData.active_users_count, reportData.inactive_users_count)
+      "
+      [styles]="{ width: '100%', height: '360px' }"
+    ></canvasjs-chart>
+  </div>
+</div>

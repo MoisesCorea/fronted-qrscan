@@ -1,0 +1,67 @@
+<div class="row mt-5 justify-content-center">
+  <div class="col-md-10">
+    <div class="table-responsive mx-3">
+      <h2 class="text-center">Lista de horarios</h2>
+      <button class="btn btn-primary addBtn" (click)="createShift()">
+        AGREGAR <i class="fa-solid fa-plus"></i>
+      </button>
+
+      <div class="form-group mt-5 col-md">
+        <input
+          type="text"
+          class="forms-control"
+          placeholder="Buscar.."
+          [(ngModel)]="filterInput"
+          name="filterpost"
+          class="forms-control"
+          placeholder="Buscar.."
+        />
+      </div>
+
+      <table class="table">
+        <thead class="table-ligth">
+          <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>ENTRADA</th>
+            <th>SALIDA</th>
+            <th>DURACIÓN</th>
+            <th>MINUTOS DE PRORROGA</th>
+            <th>ACCIONES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let shift of shifts
+                | filter : filterInput
+                | paginate : { itemsPerPage: 5, currentPage: page }
+            "
+          >
+            <td>{{ shift.id }}</td>
+            <td>{{ shift.name }}</td>
+            <td>{{ shift.entry_time }}</td>
+            <td>{{ shift.finish_time }}</td>
+            <td>{{ shift.shift_duration }}</td>
+            <td>{{ shift.mothly_late_allowance }}</td>
+
+            <td>
+              <button class="btn btn-success" (click)="updateShift(shift.id)">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </button>
+              <button class="btn btn-danger" (click)="deleteShift(shift.id)">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <pagination-controls
+      class="text-center mb-5 mt-5"
+      (pageChange)="page = $event"
+      previousLabel="Aterior"
+      nextLabel="Siguiente"
+    ></pagination-controls>
+  </div>
+</div>

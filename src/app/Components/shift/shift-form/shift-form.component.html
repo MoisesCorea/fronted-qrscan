@@ -1,0 +1,100 @@
+<div style="margin-left: auto; margin-right: auto">
+  <p id="registerFeedback"></p>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h1 class="text-center">Registro de turnos</h1>
+    <form class="form mx-3" [formGroup]="shiftForm" (ngSubmit)="saveShift()">
+      <div class="mb-2">
+        <label class="form-label" for="name">Nombre: </label>
+        <input class="form-control" type="text" [formControl]="name" />
+        <div
+          *ngIf="name.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="name.errors.required">El nombre es requerido</div>
+          <div *ngIf="name.errors.minlength">
+            El nombre debe tener el menos 5 caracteres
+          </div>
+          <div *ngIf="name.errors.maxlength">
+            El nombre debe tener una longitud máxima de 255 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label" for="entry_time">Hora de entrada: </label>
+        <input
+          class="form-control"
+          type="time"
+          [formControl]="entry_time"
+          step="1"
+        />
+        <div
+          *ngIf="entry_time.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="entry_time.errors.required">
+            La Hora de entrada es requerida
+          </div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label" for="finish_time">Hora de salida: </label>
+        <input
+          class="form-control"
+          type="time"
+          [formControl]="finish_time"
+          step="1"
+        />
+        <div
+          *ngIf="finish_time.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="finish_time.errors.required">
+            La hora de salida es requerida
+          </div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label" for="shift_duration"
+          >Duración del turno:
+        </label>
+        <input
+          class="form-control"
+          type="number"
+          [formControl]="shift_duration"
+        />
+        <div
+          *ngIf="shift_duration.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="shift_duration.errors.required">
+            La duración del turno es requerida
+          </div>
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label" for="mothly_late_allowance"
+          >Tiempo de prorroga:
+        </label>
+        <input
+          class="form-control"
+          type="number"
+          [formControl]="mothly_late_allowance"
+        />
+        <div
+          *ngIf="
+            mothly_late_allowance.errors && isValidForm != null && !isValidForm
+          "
+          [ngClass]="'error'"
+        >
+          <div *ngIf="mothly_late_allowance.errors.required">
+            EL tiempo de prorroga es requerido
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary mt-4" type="submit">Guardar</button>
+    </form>
+  </div>
+</div>

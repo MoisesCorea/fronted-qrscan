@@ -1,0 +1,18 @@
+<a [routerLink]="['/carnets', item.id]">
+  <div class="card">
+    <figure>
+      <img class="card-img-top" [src]="item.profile_image" alt="" />
+    </figure>
+    <div class="card-body">
+      <div class="card-title text-center">
+        <b>{{ item.name }} {{ item.last_name }}</b>
+      </div>
+      <div class="card-text text-center">
+        {{ getDepartmentName(item.department_id) | async }}
+      </div>
+      <figure style="text-align: center">
+        <img [src]="item.qr_image" alt="" width="150" height="150" />
+      </figure>
+    </div>
+  </div>
+</a>
