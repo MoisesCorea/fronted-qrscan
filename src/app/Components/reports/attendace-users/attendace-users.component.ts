@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ReportDTO } from 'src/app/Models/report.dto';
 import { EventDTO } from 'src/app/Models/event.dto';
+import { DepartmentDTO } from 'src/app/Models/department.dto';
+import { DepartmentService } from 'src/app/Services/department.service';
 import { ReportService } from 'src/app/Services/report.service';
-import { UserDTO } from 'src/app/Models/user.dto';
-import { UserService } from 'src/app/Services/user.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { EventService } from 'src/app/Services/event.service';
 import {
@@ -17,38 +17,35 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-attendance-user',
-  templateUrl: './attendance-user.component.html',
-  styleUrls: ['./attendance-user.component.scss'],
+  selector: 'app-attendace-users',
+  templateUrl: './attendace-users.component.html',
+  styleUrls: ['./attendace-users.component.scss'],
 })
-export class AttendanceUserComponent implements OnInit {
+export class AttendaceUsersComponent {
   report: ReportDTO;
   reportData: any;
   eventsList?: EventDTO[];
-  usersList: UserDTO[] = [];
-  filteredUsers: UserDTO[] = [];
+  departmentsList?: DepartmentDTO[];
 
-  name: UntypedFormControl;
+  page!: number; // pagination
+
   initial_date: UntypedFormControl;
   end_date: UntypedFormControl;
   events: UntypedFormControl;
+  departments: UntypedFormControl;
 
   reportForm: UntypedFormGroup;
   isValidForm: boolean | null;
-
-  filterInput: string = '';
 
   constructor(
     private reportService: ReportService,
     private sharedService: SharedService,
     private eventtService: EventService,
-    private userService: UserService,
+    private departmentService: DepartmentService,
     private formBuilder: UntypedFormBuilder
   ) {
     this.isValidForm = null;
     this.report = new ReportDTO('', 0, new Date(), new Date(), 0);
-
-    this.name = new UntypedFormControl('', [Validators.required]);
 
     this.initial_date = new UntypedFormControl(
       formatDate(this.report.initial_date, 'yyyy-MM-dd', 'en'),
@@ -61,21 +58,17 @@ export class AttendanceUserComponent implements OnInit {
     );
 
     this.events = new UntypedFormControl(null, []);
+    this.loadDepartments();
+
+    this.departments = new UntypedFormControl(null, []);
+
+    this.loadEvents();
 
     this.reportForm = this.formBuilder.group({
-      name: this.name,
+      department_id: this.departments,
       initial_date: this.initial_date,
       end_date: this.end_date,
       event_id: this.events,
-    });
-  }
-  ngOnInit(): void {
-    this.loadEvents();
-
-    this.loadUsers();
-
-    this.reportForm.get('name')?.valueChanges.subscribe((value) => {
-      this.filterUsers(value);
     });
   }
 
@@ -85,7 +78,7 @@ export class AttendanceUserComponent implements OnInit {
     let response: any;
 
     this.reportService
-      .attendanceReportUsaurio(this.report)
+      .attendanceReportUsaurios(this.report)
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
@@ -123,35 +116,18 @@ export class AttendanceUserComponent implements OnInit {
     );
   }
 
-  private loadUsers(): void {
+  private loadDepartments(): void {
     let errorResponse: any;
 
-    this.userService.getUsers().subscribe(
-      (users: UserDTO[]) => {
-        this.usersList = users;
+    this.departmentService.getDepartments().subscribe(
+      (departments: DepartmentDTO[]) => {
+        this.departmentsList = departments;
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
       }
     );
-  }
-
-  private filterUsers(value: string): void {
-    if (value.trim() === '') {
-      this.filteredUsers = [];
-    } else {
-      this.filteredUsers = this.usersList.filter((user) =>
-        (user.name + ' ' + user.last_name)
-          .toLowerCase()
-          .includes(value.toLowerCase())
-      );
-    }
-  }
-
-  selectUser(user: UserDTO): void {
-    this.reportForm.get('name')?.setValue(`${user.name} ${user.last_name}`);
-    this.filteredUsers = [];
   }
 
   onSubmit() {

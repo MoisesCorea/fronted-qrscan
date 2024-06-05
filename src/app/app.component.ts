@@ -4,17 +4,18 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { HeaderMenus } from 'src/app/Models/header-menus.dto';
 import { HeaderMenusService } from 'src/app/Services/header-menus.service';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
+import { AdminService } from './Services/admin.service';
 import { AuthService } from 'src/app/Services/auth.service';
 import { RolesService } from 'src/app/Services/roles.service';
-import { RolesDTO } from 'src/app/Models/roles.dto';
+import { AdminDTO } from './Models/admin.dto';
 import { SharedService } from 'src/app/Services/shared.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Role } from 'src/app/Models/rol.type';
+import { UserDTO } from './Models/user.dto';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,10 @@ export class AppComponent {
   isCollapsed = true;
   userRol?: string | null;
 
+  private cachedAdmins: { [radminId: string]: Observable<string> } = {};
+
+  adminId!: string | null;
+
   constructor(
     private observer: BreakpointObserver,
     private router: Router,
@@ -36,8 +41,11 @@ export class AppComponent {
     private localStorageService: LocalStorageService,
     private authService: AuthService,
     private rolesService: RolesService,
-    private sharedService: SharedService
-  ) {}
+    private sharedService: SharedService,
+    private adminService: AdminService
+  ) {
+    this.adminId = this.localStorageService.get('user_id');
+  }
 
   ngOnInit() {
     const isAuthenticated = this.authService.isAuthenticated();
@@ -50,6 +58,26 @@ export class AppComponent {
         this.isMobile = false;
       }
     });
+  }
+
+  getAdminName(adminId: string): Observable<string> {
+    if (this.cachedAdmins[adminId]) {
+      return this.cachedAdmins[adminId];
+    } else {
+      const admins$ = this.adminService.getAdminById(adminId).pipe(
+        tap(() => console.log('Obteniendo nombre del rol')),
+        map((admin: AdminDTO) => {
+          return admin.name + ' ' + admin.last_name;
+        }),
+        catchError((error) => {
+          console.error('Error obteniendo el nombre del rol:', error);
+          return of('Error al obtener el nombre del rol');
+        })
+      );
+
+      this.cachedAdmins[adminId] = admins$;
+      return admins$;
+    }
   }
 
   userRolIn(allowedRoles: Role[]): boolean {
@@ -71,9 +99,6 @@ export class AppComponent {
     }
   }
 
-  login(): void {
-    this.router.navigateByUrl('login');
-  }
   logout(): void {
     this.authService.logout().subscribe(
       () => {

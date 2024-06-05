@@ -8,6 +8,7 @@ export class ShiftDTO {
   finish_time: string;
   shift_duration: number;
   mothly_late_allowance: number;
+  days: string;
 
   constructor(
     id: number,
@@ -15,7 +16,8 @@ export class ShiftDTO {
     entry_time: string,
     finish_time: string,
     shift_duration: number,
-    mothly_late_allowance: number
+    mothly_late_allowance: number,
+    days: string
   ) {
     this.id = id;
     this.name = name;
@@ -23,5 +25,6 @@ export class ShiftDTO {
     this.finish_time = finish_time;
     this.shift_duration = shift_duration;
     this.mothly_late_allowance = mothly_late_allowance;
+    this.days = days;
   }
 }

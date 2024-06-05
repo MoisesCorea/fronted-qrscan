@@ -9,7 +9,7 @@ import { RolesService } from 'src/app/Services/roles.service';
 import { Role } from 'src/app/Models/rol.type';
 import { RolesDTO } from 'src/app/Models/roles.dto';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-admin-list',
@@ -17,7 +17,11 @@ import { catchError, map, tap } from 'rxjs/operators';
   styleUrls: ['./admin-list.component.scss'],
 })
 export class AdminListComponent {
+  shouldShowRow(arg0: any): any {
+    throw new Error('Method not implemented.');
+  }
   admins?: AdminDTO[];
+  userId: string | null;
   private cachedRoles: { [rol_id: number]: Observable<string> } = {};
 
   filterInput: string = '';
@@ -30,7 +34,15 @@ export class AdminListComponent {
     private sharedService: SharedService,
     private rolesService: RolesService
   ) {
+    this.userId = this.localStorageService.get('user_id');
     this.loadAdmins();
+  }
+
+  getNum(param: string | null): number {
+    if (param) {
+      return parseInt(param);
+    }
+    return 100;
   }
 
   private loadAdmins(): void {
@@ -78,24 +90,44 @@ export class AdminListComponent {
 
   deleteAdmin(adminId: number | undefined): void {
     let errorResponse: any;
+    let responseOK: boolean = false;
+    let response: any;
 
     // show confirmation popup
-    let result = confirm('Confirm delete category with id: ' + adminId + ' .');
+    let result = confirm(
+      'Confirma elminar el registro con ID: ' + adminId + ' .'
+    );
     if (result) {
       if (adminId) {
-        console.log('entramos al if del admin');
-        this.adminService.deleteAdmin(adminId).subscribe(
-          (rowsAffected: deleteResponse) => {
-            if (rowsAffected.affected > 0) {
-              console.log('Llegamos a las filas afectadas');
-              this.loadAdmins();
+        this.adminService
+          .deleteAdmin(adminId)
+          .pipe(
+            finalize(async () => {
+              await this.sharedService.managementToast(
+                'apiAlert',
+                responseOK,
+                errorResponse,
+                response
+              );
+
+              if (responseOK) {
+                this.router.navigateByUrl('admins');
+              }
+            })
+          )
+          .subscribe(
+            (rowsAffected: deleteResponse) => {
+              if (rowsAffected.affected > 0) {
+                response = rowsAffected;
+                responseOK = true;
+                this.loadAdmins();
+              }
+            },
+            (error: HttpErrorResponse) => {
+              errorResponse = error.error;
+              this.sharedService.errorLog(errorResponse);
             }
-          },
-          (error: HttpErrorResponse) => {
-            errorResponse = error.error;
-            this.sharedService.errorLog(errorResponse);
-          }
-        );
+          );
       } else {
         alert('No puedes eliminar el registro');
       }

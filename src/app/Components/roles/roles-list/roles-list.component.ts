@@ -5,6 +5,7 @@ import { RolesService, deleteResponse } from 'src/app/Services/roles.service';
 import { RolesDTO } from 'src/app/Models/roles.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-roles-list',
@@ -48,24 +49,44 @@ export class RolesListComponent {
     this.route.navigateByUrl('/rol/item/' + rolId);
   }
 
-  deleteRol(adminId: number): void {
+  deleteRol(rolId: number): void {
     let errorResponse: any;
-
+    let responseOK: boolean = false;
+    let response: any;
     // show confirmation popup
-    let result = confirm('Confirm delete category with id: ' + adminId + ' .');
+    let result = confirm(
+      'Confirma elminar el registro con ID: ' + rolId + ' .'
+    );
     if (result) {
-      this.rolesService.deleteRol(adminId).subscribe(
-        (rowsAffected: deleteResponse) => {
-          if (rowsAffected.affected > 0) {
-            console.log('Llegamos a las filas afectadas');
-            this.loadRoles();
+      this.rolesService
+        .deleteRol(rolId)
+        .pipe(
+          finalize(async () => {
+            await this.sharedService.managementToast(
+              'apiAlert',
+              responseOK,
+              errorResponse,
+              response
+            );
+
+            if (responseOK) {
+              this.route.navigateByUrl('roles');
+            }
+          })
+        )
+        .subscribe(
+          (rowsAffected: deleteResponse) => {
+            if (rowsAffected.affected > 0) {
+              response = rowsAffected;
+              responseOK = true;
+              this.loadRoles();
+            }
+          },
+          (error: HttpErrorResponse) => {
+            errorResponse = error.error;
+            this.sharedService.errorLog(errorResponse);
           }
-        },
-        (error: HttpErrorResponse) => {
-          errorResponse = error.error;
-          this.sharedService.errorLog(errorResponse);
-        }
-      );
+        );
     }
   }
 }

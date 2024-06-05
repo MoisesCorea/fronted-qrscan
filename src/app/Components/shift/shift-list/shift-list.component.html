@@ -1,3 +1,4 @@
+<app-alert></app-alert>
 <div class="row mt-5 justify-content-center">
   <div class="col-md-10">
     <div class="table-responsive mx-3">
@@ -12,9 +13,6 @@
           class="forms-control"
           placeholder="Buscar.."
           [(ngModel)]="filterInput"
-          name="filterpost"
-          class="forms-control"
-          placeholder="Buscar.."
         />
       </div>
 
@@ -27,6 +25,7 @@
             <th>SALIDA</th>
             <th>DURACIÓN</th>
             <th>MINUTOS DE PRORROGA</th>
+            <th>DÍAS LABORALES</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
@@ -44,6 +43,7 @@
             <td>{{ shift.finish_time }}</td>
             <td>{{ shift.shift_duration }}</td>
             <td>{{ shift.mothly_late_allowance }}</td>
+            <td>{{ daysOfWork(shift.days) }}</td>
 
             <td>
               <button class="btn btn-success" (click)="updateShift(shift.id)">

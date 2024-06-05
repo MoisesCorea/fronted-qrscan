@@ -5,6 +5,7 @@ import { ShiftService, deleteResponse } from 'src/app/Services/shift.service';
 import { ShiftDTO } from 'src/app/Models/shift.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-shift-list',
@@ -15,6 +16,16 @@ export class ShiftListComponent {
   shifts?: ShiftDTO[];
   filterInput: string = ''; //PipeFilter
   page!: number; // pagination
+
+  weekDays = [
+    { id: 0, name: 'Domingo' },
+    { id: 1, name: 'Lunes' },
+    { id: 2, name: 'Martes' },
+    { id: 3, name: 'Miercoles' },
+    { id: 4, name: 'Jueves' },
+    { id: 5, name: 'Viernes' },
+    { id: 6, name: 'Sábado' },
+  ];
 
   constructor(
     private shiftService: ShiftService,
@@ -47,23 +58,55 @@ export class ShiftListComponent {
     this.route.navigateByUrl('/turno/item/' + rolId);
   }
 
-  deleteShift(adminId: number): void {
+  deleteShift(shiftId: number): void {
     let errorResponse: any;
+    let responseOK: boolean = false;
+    let response: any;
 
     // show confirmation popup
-    let result = confirm('Confirm delete category with id: ' + adminId + ' .');
+    let result = confirm(
+      'Confirma elminar el registro con ID: ' + shiftId + ' .'
+    );
     if (result) {
-      this.shiftService.deleteShift(adminId).subscribe(
-        (rowsAffected: deleteResponse) => {
-          if (rowsAffected.affected > 0) {
-            this.loadShifts();
+      this.shiftService
+        .deleteShift(shiftId)
+        .pipe(
+          finalize(async () => {
+            await this.sharedService.managementToast(
+              'apiAlert',
+              responseOK,
+              errorResponse,
+              response
+            );
+
+            if (responseOK) {
+              this.route.navigateByUrl('turnos');
+            }
+          })
+        )
+        .subscribe(
+          (rowsAffected: deleteResponse) => {
+            if (rowsAffected.affected > 0) {
+              response = rowsAffected;
+              responseOK = true;
+              this.loadShifts();
+            }
+          },
+          (error: HttpErrorResponse) => {
+            errorResponse = error.error;
+            this.sharedService.errorLog(errorResponse);
           }
-        },
-        (error: HttpErrorResponse) => {
-          errorResponse = error.error;
-          this.sharedService.errorLog(errorResponse);
-        }
-      );
+        );
     }
+  }
+
+  daysOfWork(ids: string): string {
+    let workingDaysArray: number[] = JSON.parse(ids);
+    let dayNames = workingDaysArray.map((id) => {
+      let day = this.weekDays.find((day) => day.id === id);
+      return day ? day.name : '';
+    });
+
+    return dayNames.filter((name) => name).join(', ');
   }
 }

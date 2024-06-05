@@ -11,10 +11,17 @@
     {{
       (headerMenusService.headerManagement | async)?.showNoAuthSection
         ? "Inicie sesión"
-        : "Perfil"
+        : (getAdminName(adminId ? adminId : "1") | async)
     }}
   </button>
   <mat-menu #menu="matMenu">
+    <a
+      mat-menu-item
+      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+      [routerLink]="['perfil']"
+    >
+      <span>Perfil de usuario</span>
+    </a>
     <button
       mat-menu-item
       *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
@@ -22,13 +29,13 @@
     >
       <span>Cerrar sesión</span>
     </button>
-    <button
+    <a
       mat-menu-item
       *ngIf="(headerMenusService.headerManagement | async)?.showNoAuthSection"
-      (click)="login()"
+      [routerLink]="['perfil']"
     >
       <span>Iniciar sesión</span>
-    </button>
+    </a>
   </mat-menu>
 </mat-toolbar>
 
@@ -138,6 +145,13 @@
             [routerLink]="['reporte/usuario']"
           >
             <span>Reporte de usuario</span>
+          </a>
+          <a
+            mat-menu-item
+            *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
+            [routerLink]="['reporte/usuarios']"
+          >
+            <span>Reporte General</span>
           </a>
         </mat-menu>
       </div>

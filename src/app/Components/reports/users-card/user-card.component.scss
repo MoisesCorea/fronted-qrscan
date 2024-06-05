@@ -1,6 +1,42 @@
-.container-cards {
-  width: 80%;
+/* Estilos de impresión */
+@media print {
+  .card {
+    page-break-inside: avoid;
+    margin-bottom: 200px;
+  }
 
-  margin: 0 auto;
-  padding-top: 3rem;
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .col-md-4 {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-sizing: border-box;
+    padding: 10px;
+  }
+
+  .card a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .card-img-top {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
+  .card-title,
+  .card-text {
+    font-size: 14px;
+  }
+
+  figure {
+    margin: 10px 0;
+  }
 }

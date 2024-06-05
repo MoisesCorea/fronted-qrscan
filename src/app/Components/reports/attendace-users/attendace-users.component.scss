@@ -1,0 +1,10 @@
+.element {
+  margin-bottom: 5rem;
+}
+
+@media print {
+  .element {
+    page-break-inside: avoid;
+    margin-bottom: 200px;
+  }
+}

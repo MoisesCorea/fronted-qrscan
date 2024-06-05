@@ -1,125 +1,166 @@
-<form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="container mt-5">
-  <div class="row">
-    <div class="form-group col-md-2">
-      <label class="form-label" for="name">Correo:</label>
-      <input type="text" class="form-control" id="name" [formControl]="email" />
-      <div
-        *ngIf="email.errors && isValidForm != null && !isValidForm"
-        class="text-danger"
-      >
-        <div *ngIf="email.errors.required">El correo es requerido</div>
-        <div *ngIf="email.errors.pattern">
-          El correo no tiene un formato valido
+<app-alert></app-alert>
+<div class="container-main">
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="mt-5 mb-5">
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label class="form-label" for="name">Nombre:</label>
+        <input
+          type="text"
+          class="form-control"
+          [formControl]="name"
+          placeholder="Buscar.."
+        />
+        <div
+          *ngIf="name.errors && isValidForm != null && !isValidForm"
+          class="text-danger"
+        >
+          <div *ngIf="name.errors.required">El nombre es requerido</div>
         </div>
-        <div *ngIf="email.errors.maxlength">
-          El correo debe tener una longitud máxima de 255 caracteres
+        <ul *ngIf="filteredUsers.length > 0">
+          <li *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+            {{ user.name + " " + user.last_name }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label class="form-label" for="initial_date">Fecha Inicial:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="initial_date"
+          [formControl]="initial_date"
+        />
+        <div
+          *ngIf="initial_date.errors && isValidForm != null && !isValidForm"
+          class="text-danger"
+        >
+          <div *ngIf="initial_date.errors.required">
+            La fecha inicial es requerida
+          </div>
         </div>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label class="form-label" for="end_date">Fecha Final:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="end_date"
+          [formControl]="end_date"
+        />
+        <div
+          *ngIf="end_date.errors && isValidForm != null && !isValidForm"
+          class="text-danger"
+        >
+          <div *ngIf="end_date.errors.required">
+            La fecha final es requerida
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-3">
+        <label class="form-label" for="roles">Evento:</label>
+        <select class="form-control" [formControl]="events" required>
+          <option [ngValue]="null" selected>-- Seleccionar --</option>
+          <option *ngFor="let event of eventsList" [ngValue]="event.id">
+            {{ event.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="events.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="events.errors.required">Selecciona un rol de usuario</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary addBtn">Generar</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="reportData" class="container mt-5">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end align-items-center py-3">
+        <button
+          class="btn btn-secondary"
+          [useExistingCss]="true"
+          printSectionId="report"
+          ngxPrint
+        >
+          <i class="fa-solid fa-print"></i>
+        </button>
       </div>
     </div>
 
-    <div class="form-group col-md-2">
-      <label class="form-label" for="initial_date">Fecha Inicial:</label>
-      <input
-        type="date"
-        class="form-control"
-        id="initial_date"
-        [formControl]="initial_date"
-      />
-      <div
-        *ngIf="initial_date.errors && isValidForm != null && !isValidForm"
-        class="text-danger"
-      >
-        <div *ngIf="initial_date.errors.required">
-          La fecha inicial es requerida
+    <div id="report">
+      <h2 class="text-center mb-4">Reporte de Asistencia</h2>
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <p><strong>Usuario:</strong> {{ reportData.user_name }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Horario:</strong> {{ reportData.shift_name }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Evento:</strong> {{ reportData.event_name }}</p>
+        </div>
+        <div class="col-md-6" *ngIf="reportData.daily_attendance === 'Si'">
+          <p>
+            <strong>Tiempo No Dedicado (Total):</strong>
+            {{ reportData.total_non_didicated_time.toFixed(2) / 60 }} horas /
+            {{ reportData.total_non_didicated_time }} minutos
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p>
+            <strong>Tiempo Dedicado (Total):</strong>
+            {{ reportData.total_dedicated_hours.toFixed(2) }} horas /
+            {{ reportData.total_dedicated_hours.toFixed(2) * 60 }} minutos
+          </p>
         </div>
       </div>
-    </div>
-
-    <div class="form-group col-md-2">
-      <label class="form-label" for="end_date">Fecha Final:</label>
-      <input
-        type="date"
-        class="form-control"
-        id="end_date"
-        [formControl]="end_date"
-      />
-      <div
-        *ngIf="end_date.errors && isValidForm != null && !isValidForm"
-        class="text-danger"
-      >
-        <div *ngIf="end_date.errors.required">La fecha final es requerida</div>
+      <div class="row">
+        <div class="col">
+          <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
+                <th *ngIf="reportData.daily_attendance === 'Si'">
+                  Minutos Tarde
+                </th>
+                <th *ngIf="reportData.daily_attendance === 'Si'">
+                  Minutos Por Salida Temprana
+                </th>
+                <th *ngIf="reportData.daily_attendance === 'Si'">
+                  Tiempo no dedicado (minutos)
+                </th>
+                <th>Tiempo dedicado (horas)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let attendance of reportData.attendances">
+                <td>{{ attendance.attendance_date }}</td>
+                <td>{{ attendance.entry_time }}</td>
+                <td>{{ attendance.finish_time }}</td>
+                <td *ngIf="reportData.daily_attendance === 'Si'">
+                  {{ attendance.minutes_late }}
+                </td>
+                <td *ngIf="reportData.daily_attendance === 'Si'">
+                  {{ attendance.minutes_early_leaving }}
+                </td>
+                <td *ngIf="reportData.daily_attendance === 'Si'">
+                  {{ attendance.time_non_dedicated }}
+                </td>
+                <td>{{ attendance.time_dedicated }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-
-    <div class="form-group col-md-3">
-      <label class="form-label" for="roles">Evento:</label>
-      <select class="form-control" [formControl]="events" required>
-        <option [ngValue]="null" selected>-- Seleccionar --</option>
-        <option *ngFor="let event of eventsList" [ngValue]="event.id">
-          {{ event.name }}
-        </option>
-      </select>
-      <div
-        *ngIf="events.errors && isValidForm != null && !isValidForm"
-        [ngClass]="'error'"
-      >
-        <div *ngIf="events.errors.required">Selecciona un rol de usuario</div>
-      </div>
-    </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-primary addBtn">Generar</button>
     </div>
   </div>
-</form>
-
-<div *ngIf="reportData" class="container mt-5">
-  <h2>Reporte de Asistencia</h2>
-  <p><strong>Nombre del Usuario:</strong> {{ reportData.user_name }}</p>
-  <p><strong>Nombre del Turno:</strong> {{ reportData.shift_name }}</p>
-  <p><strong>Nombre del evento:</strong> {{ reportData.event_name }}</p>
-  <p><strong>Asistencia diaria:</strong> {{ reportData.daily_attendance }}</p>
-  <p *ngIf="reportData.daily_attendance === 'Si'">
-    <strong>Tiempo No Dedicado Total (minutos):</strong>
-    {{ reportData.total_non_didicated_time }}
-  </p>
-  <p>
-    <strong>Tiempo Dedicado Total (Horas):</strong>
-    {{ reportData.total_dedicated_hours }}
-  </p>
-
-  <h3>Asistencias</h3>
-  <table class="table table-bordered">
-    <thead class="thead-light">
-      <tr>
-        <th>Fecha</th>
-        <th>Hora de Entrada</th>
-        <th>Hora de Salida</th>
-        <th *ngIf="reportData.daily_attendance === 'Si'">Minutos Tarde</th>
-        <th *ngIf="reportData.daily_attendance === 'Si'">
-          Minutos de Salida Temprana
-        </th>
-        <th *ngIf="reportData.daily_attendance === 'Si'">
-          Tiempo no dedicado (minutos)
-        </th>
-        <th>Tiempo dedicado (horas)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let attendance of reportData.attendances">
-        <td>{{ attendance.attendance_date }}</td>
-        <td>{{ attendance.entry_time }}</td>
-        <td>{{ attendance.finish_time }}</td>
-        <td *ngIf="reportData.daily_attendance === 'Si'">
-          {{ attendance.minutes_late }}
-        </td>
-        <td *ngIf="reportData.daily_attendance === 'Si'">
-          {{ attendance.minutes_early_leaving }}
-        </td>
-        <td *ngIf="reportData.daily_attendance === 'Si'">
-          {{ attendance.time_non_dedicated }}
-        </td>
-        <td>{{ attendance.time_dedicated }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>

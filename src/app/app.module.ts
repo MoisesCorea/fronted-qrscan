@@ -1,6 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,11 +23,8 @@ import { ShiftFormComponent } from './Components/shift/shift-form/shift-form.com
 import { ShiftListComponent } from './Components/shift/shift-list/shift-list.component';
 import { UserListComponent } from './Components/user/user-list/user-list.component';
 import { UserFormComponent } from './Components/user/user-form/user-form.component';
-import { NgQrScannerModule } from 'angular2-qrscanner';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { CardComponent } from './Shared/card/card.component';
 import { UsersCardComponent } from './Components/reports/users-card/user-card.component';
-import { UserCardComponent } from './Components/reports/user-card/user-card.component';
 import { AttendanceUserComponent } from './Components/reports/attendance-user/attendance-user.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,6 +33,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule } from '@angular/forms';
 import { PhoneFormatPipe } from './Pipes/phone-format.pipe';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
@@ -44,6 +42,10 @@ import localeEs from '@angular/common/locales/es';
 import { FilterDashboardPipe } from './Pipes/filterDashboard.pipe';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterPipe } from './Pipes/filter.pipe';
+import { AlertComponent } from './Shared/alert/alert.component';
+import { AttendaceUsersComponent } from './Components/reports/attendace-users/attendace-users.component';
+import { NgxPrintModule } from 'ngx-print';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 // Registrar el locale para español
 registerLocaleData(localeEs, 'es');
@@ -70,29 +72,31 @@ registerLocaleData(localeEs, 'es');
     UserFormComponent,
     CardComponent,
     UsersCardComponent,
-    UserCardComponent,
     AttendanceUserComponent,
     PhoneFormatPipe,
     FilterDashboardPipe,
     FilterPipe,
+    AlertComponent,
+    AttendaceUsersComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgQrScannerModule,
-    ZXingScannerModule,
     BrowserAnimationsModule,
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatTabsModule,
     FormsModule,
     MatListModule,
     MatMenuModule,
     NgxPaginationModule,
     CanvasJSAngularChartsModule,
+    ZXingScannerModule,
+    NgxPrintModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es' }, // Proveer LOCALE_ID
@@ -104,5 +108,6 @@ registerLocaleData(localeEs, 'es');
   ],
   bootstrap: [AppComponent],
   exports: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

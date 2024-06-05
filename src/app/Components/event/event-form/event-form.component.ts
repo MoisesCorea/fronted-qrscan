@@ -101,6 +101,7 @@ export class EventFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.eventForm.invalid) {
       return;
@@ -116,9 +117,10 @@ export class EventFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -128,11 +130,11 @@ export class EventFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {
-          responseOK = false;
           errorResponse = error.error;
           this.sharedService.errorLog(errorResponse);
         }
@@ -142,15 +144,18 @@ export class EventFormComponent implements OnInit {
   private editEvent(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
+
     if (this.eventId) {
       this.eventService
         .updateEvent(this.eventId, this.event)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
@@ -159,7 +164,8 @@ export class EventFormComponent implements OnInit {
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {

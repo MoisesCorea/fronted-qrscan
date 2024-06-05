@@ -92,6 +92,7 @@ export class RolesFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.rolForm.invalid) {
       return;
@@ -107,9 +108,10 @@ export class RolesFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -119,7 +121,8 @@ export class RolesFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {
@@ -133,15 +136,18 @@ export class RolesFormComponent implements OnInit {
   private editRol(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
+
     if (this.rolId) {
       this.rolesService
         .updateRol(this.rolId, this.rol)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
@@ -150,7 +156,8 @@ export class RolesFormComponent implements OnInit {
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {

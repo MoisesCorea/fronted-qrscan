@@ -211,6 +211,7 @@ export class UserFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.userForm.invalid) {
       return;
@@ -226,9 +227,10 @@ export class UserFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -238,7 +240,8 @@ export class UserFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {
@@ -252,6 +255,7 @@ export class UserFormComponent implements OnInit {
   private editUser(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
 
     let formData = this.getFormData(this.user);
 
@@ -261,9 +265,10 @@ export class UserFormComponent implements OnInit {
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
@@ -272,7 +277,8 @@ export class UserFormComponent implements OnInit {
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {
@@ -323,7 +329,6 @@ export class UserFormComponent implements OnInit {
     this.user = this.userForm.value;
 
     if (this.isUpdateMode) {
-      console.log('estamos en modo update: ', this.isUpdateMode);
       this.editUser();
     } else {
       this.createUser();

@@ -34,12 +34,12 @@ export class AdminService {
 
   updateAdmin(adminId: string, admin: AdminDTO): Observable<AdminDTO> {
     return this.http
-      .put<AdminDTO>(this.urlQrScanApi + '/' + adminId, admin)
+      .patch<AdminDTO>(this.urlQrScanApi + '/' + adminId, admin)
       .pipe(
         catchError(this.sharedService.handleError),
         tap((result) => {
           // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
+          console.log('Admin actualizado:', result);
           // Puedes agregar más lógica aquí según tus necesidades
         })
       );
@@ -65,6 +65,19 @@ export class AdminService {
   deleteAdmin(adminId: number): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + adminId)
+      .pipe(
+        catchError(this.sharedService.handleError),
+        tap((result) => {
+          // Esto se ejecutará cada vez que se complete con éxito el registro
+          console.log('Registro completado:', result);
+          // Puedes agregar más lógica aquí según tus necesidades
+        })
+      );
+  }
+
+  changePassword(password: any): Observable<any> {
+    return this.http
+      .post<AdminDTO>('http://localhost:8000/api/change-password', password)
       .pipe(
         catchError(this.sharedService.handleError),
         tap((result) => {

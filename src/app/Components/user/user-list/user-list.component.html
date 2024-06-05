@@ -1,3 +1,4 @@
+<app-alert></app-alert>
 <div class="row mt-5 justify-content-center">
   <div class="col-md-11 mx-5">
     <div class="table-responsive mx-3">
@@ -21,13 +22,10 @@
       <table class="table">
         <thead class="table-light">
           <tr>
-            <TH>IMAGEN DE PERFIL</TH>
+            <!--TH>IMAGEN DE PERFIL</TH-->
             <th>NOMBRE</th>
             <th>APELLIDO</th>
-            <th>EDAD</th>
-            <th>GÉNERO</th>
             <th>CORREO</th>
-            <th>DIRECCIÓN</th>
             <th>TELÉFONO</th>
             <th>HORARIO</th>
             <th>ISNTANCIA</th>
@@ -43,7 +41,7 @@
                 | paginate : { itemsPerPage: 5, currentPage: page }
             "
           >
-            <td>
+            <!--td>
               <a [routerLink]="['/carnets', user.id]">
                 <img
                   src="{{ user.profile_image }}"
@@ -52,13 +50,10 @@
                   alt=""
                 />
               </a>
-            </td>
+            </td-->
             <td>{{ user.name }}</td>
             <td>{{ user.last_name }}</td>
-            <td>{{ user.age }}</td>
-            <td>{{ user.gender }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.address }}</td>
             <td>{{ user.phone_number }}</td>
             <td>{{ getShiftName(user.shift_id) | async }}</td>
             <td>{{ getDepartmentName(user.department_id) | async }}</td>

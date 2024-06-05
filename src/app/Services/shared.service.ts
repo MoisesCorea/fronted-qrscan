@@ -21,32 +21,37 @@ export class SharedService {
   async managementToast(
     element: string,
     validRequest: boolean,
-    error?: ResponseError
+    error?: ResponseError,
+    response?: any
   ): Promise<void> {
     const toastMsg = document.getElementById(element);
     if (toastMsg) {
       if (validRequest) {
         toastMsg.className = 'show requestOk';
-        toastMsg.textContent = 'Form submitted successfully.';
+        toastMsg.innerHTML =
+          '<h6><i class="fa-solid fa-circle-check"></i> Éxito </h6>' +
+          '<p>' +
+          response.message;
+        +'</p>';
         await this.wait(2500);
         toastMsg.className = toastMsg.className.replace('show', '');
       } else {
-        toastMsg.className = 'show requestKo';
-        if (error?.messageDetail) {
-          toastMsg.textContent =
-            'Error on form submitted, show logs. Message: ' +
-            error?.message +
-            '. Message detail: ' +
-            error?.messageDetail +
-            '. Status code: ' +
-            error?.statusCode;
-        } else {
-          toastMsg.textContent =
-            'Error on form submitted, show logs. Message: ' +
-            error?.message +
-            '. Status code: ' +
-            error?.statusCode;
-        }
+        error?.statusCode === 409
+          ? (toastMsg.className = 'show requestAl')
+          : (toastMsg.className = 'show requestKo');
+
+        toastMsg.innerHTML =
+          `<h6>${
+            error?.statusCode === 409
+              ? '<i class="fa-solid fa-circle-info"></i> Información'
+              : '<i class="fa-solid fa-triangle-exclamation"></i> Ha ocurrido un error!'
+          }</h6>` +
+          `<p>${error?.message}</p>` +
+          `${
+            error?.messageDetail
+              ? `<p>Detalles: ${error.messageDetail}</p>`
+              : ''
+          }`;
 
         await this.wait(2500);
         toastMsg.className = toastMsg.className.replace('show', '');

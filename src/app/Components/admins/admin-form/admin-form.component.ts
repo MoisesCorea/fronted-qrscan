@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { HeaderMenus } from 'src/app/Models/header-menus.dto';
+import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { AdminDTO } from 'src/app/Models/admin.dto';
 import { RolesDTO } from 'src/app/Models/roles.dto';
 import { HeaderMenusService } from 'src/app/Services/header-menus.service';
@@ -38,7 +38,7 @@ export class AdminFormComponent implements OnInit {
   rolesList!: RolesDTO[];
 
   private isUpdateMode: boolean;
-  private adminId: string | null;
+  private adminId?: string | null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -49,7 +49,6 @@ export class AdminFormComponent implements OnInit {
     private rolesService: RolesService
   ) {
     this.admin = new AdminDTO('', '', '', '', '', 0);
-    this.adminId = this.activatedRoute.snapshot.paramMap.get('id');
     this.isUpdateMode = false;
     this.isValidForm = null;
 
@@ -77,10 +76,7 @@ export class AdminFormComponent implements OnInit {
       Validators.maxLength(50),
     ]);
 
-    this.password = new UntypedFormControl(this.admin.password, [
-      Validators.required,
-      Validators.minLength(8),
-    ]);
+    this.password = new UntypedFormControl(this.admin.password, []);
 
     this.roles = new UntypedFormControl(null, []);
 
@@ -98,11 +94,25 @@ export class AdminFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let errorResponse: any;
+    this.adminId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.isUpdateMode = !!this.adminId; // Determinar el modo de actualización
     // update
-    if (this.adminId) {
-      this.isUpdateMode = true;
+    if (this.isUpdateMode) {
+      this.loadAdmin();
+    } else {
+      // Aplicar validadores para el modo de creación
+      this.password.setValidators([
+        Validators.required,
+        Validators.minLength(8),
+      ]);
+      this.password.updateValueAndValidity(); // Actualizar el estado del control
+    }
+  }
 
+  loadAdmin(): void {
+    let errorResponse: any;
+
+    if (this.adminId) {
       this.adminService.getAdminById(this.adminId).subscribe(
         (admin: AdminDTO) => {
           this.admin = admin;
@@ -114,8 +124,6 @@ export class AdminFormComponent implements OnInit {
           this.email.setValue(this.admin.email);
 
           this.alias.setValue(this.admin.alias);
-
-          this.password.setValue(this.admin.password);
 
           this.roles.setValue(this.admin.rol_id);
 
@@ -153,15 +161,18 @@ export class AdminFormComponent implements OnInit {
   private editAdmin(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
+
     if (this.adminId) {
       this.adminService
         .updateAdmin(this.adminId, this.admin)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
@@ -170,7 +181,8 @@ export class AdminFormComponent implements OnInit {
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {
@@ -185,6 +197,7 @@ export class AdminFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.adminForm.invalid) {
       return;
@@ -200,9 +213,10 @@ export class AdminFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -212,7 +226,8 @@ export class AdminFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {

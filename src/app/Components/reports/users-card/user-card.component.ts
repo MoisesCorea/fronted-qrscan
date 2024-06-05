@@ -64,4 +64,27 @@ export class UsersCardComponent {
       status: user.status,
     };
   }
+
+  getDepartmentName(department_id: any): Observable<string> {
+    if (this.cachedDepartments[department_id]) {
+      return this.cachedDepartments[department_id];
+    } else {
+      const departmentObservable = this.departmentService
+        .getDepartmentById(department_id)
+        .pipe(
+          map((department: DepartmentDTO) => department.name),
+          catchError((error) => {
+            console.error(
+              'Error obteniendo el nombre del departamento:',
+              error
+            );
+            return of('Error al obtener el nombre del departamento');
+          })
+        );
+
+      this.cachedDepartments[department_id] = departmentObservable;
+
+      return departmentObservable;
+    }
+  }
 }

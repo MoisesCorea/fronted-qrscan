@@ -1,0 +1,74 @@
+#apiAlert {
+  display: none;
+  min-width: 250px;
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+  z-index: 1;
+  font-size: 14px;
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle profundidad */
+  transition: visibility 0s, opacity 0.5s linear; /* Transición suave */
+}
+
+#apiAlert.requestOk {
+  background-color: #28a745;
+}
+
+#apiAlert.requestKo {
+  background-color: #dc3545;
+}
+
+#apiAlert.requestAl {
+  background-color: #17a2b8;
+}
+
+#apiAlert.show {
+  display: block;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}

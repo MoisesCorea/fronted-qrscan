@@ -8,6 +8,7 @@ import {
 import { DepartmentDTO } from 'src/app/Models/department.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-department-list',
@@ -52,24 +53,43 @@ export class DepartmentListComponent {
 
   deleteDepartment(departmentId: number): void {
     let errorResponse: any;
+    let responseOK: boolean = false;
+    let response: any;
 
     // show confirmation popup
     let result = confirm(
-      'Confirm delete department with id: ' + departmentId + ' .'
+      'Confirma elminar el registro con ID: ' + departmentId + ' .'
     );
     if (result) {
-      this.departmentService.deleteDepartment(departmentId).subscribe(
-        (rowsAffected: deleteResponse) => {
-          if (rowsAffected.affected > 0) {
-            console.log('Llegamos a las filas afectadas');
-            this.loadDepartments();
+      this.departmentService
+        .deleteDepartment(departmentId)
+        .pipe(
+          finalize(async () => {
+            await this.sharedService.managementToast(
+              'apiAlert',
+              responseOK,
+              errorResponse,
+              response
+            );
+
+            if (responseOK) {
+              this.route.navigateByUrl('departamentos');
+            }
+          })
+        )
+        .subscribe(
+          (rowsAffected: deleteResponse) => {
+            if (rowsAffected.affected > 0) {
+              responseOK = true;
+              response = rowsAffected;
+              this.loadDepartments();
+            }
+          },
+          (error: HttpErrorResponse) => {
+            errorResponse = error.error;
+            this.sharedService.errorLog(errorResponse);
           }
-        },
-        (error: HttpErrorResponse) => {
-          errorResponse = error.error;
-          this.sharedService.errorLog(errorResponse);
-        }
-      );
+        );
     }
   }
 }

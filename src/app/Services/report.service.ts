@@ -17,7 +17,15 @@ export class ReportService {
   }
 
   attendanceReportUsaurio(report: ReportDTO): Observable<any> {
-    const url = `${this.urlQrScanApi}/usuario?email=${report.email}&initial_date=${report.initial_date}&end_date=${report.end_date} &event_id=${report.event_id}`;
+    const url = `${this.urlQrScanApi}/usuario?name=${report.name}&initial_date=${report.initial_date}&end_date=${report.end_date} &event_id=${report.event_id}`;
+
+    return this.http
+      .get<any>(url)
+      .pipe(catchError(this.sharedService.handleError));
+  }
+
+  attendanceReportUsaurios(report: ReportDTO): Observable<any> {
+    const url = `${this.urlQrScanApi}/usuarios?department_id=${report.department_id}&initial_date=${report.initial_date}&end_date=${report.end_date}&event_id=${report.event_id}`;
 
     return this.http
       .get<any>(url)

@@ -1,9 +1,11 @@
 import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
-import { ZXingScannerComponent } from '@zxing/ngx-scanner';
-import { BarcodeFormat } from '@zxing/library';
+//import { ZXingScannerComponent } from '@zxing/ngx-scanner';
+//import { BarcodeFormat } from '@zxing/library';
 import { UserService } from 'src/app/Services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SharedService } from 'src/app/Services/shared.service';
+import { finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,21 +14,13 @@ import { SharedService } from 'src/app/Services/shared.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent implements OnInit {
-  allowedFormats = [
-    BarcodeFormat.QR_CODE,
-    BarcodeFormat.EAN_13,
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX /*, ...*/,
-  ];
-
-  @ViewChild('scanner', { static: false })
-  scanner!: ZXingScannerComponent;
   msg!: string;
   currentDate: Date = new Date();
 
   constructor(
     private userService: UserService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private route: Router
   ) {}
 
   ngOnInit() {
@@ -37,15 +31,34 @@ export class HomeComponent implements OnInit {
 
   handleQrCodeResult(result: any) {
     let errorResponse: any;
+    let responseOK: boolean = false;
+    let response: any;
 
-    this.userService.userRegisterattendance(result).subscribe(
-      (msg) => {
-        alert(msg.message);
-      },
-      (error: HttpErrorResponse) => {
-        errorResponse = error.error;
-        this.sharedService.errorLog(errorResponse);
-      }
-    );
+    this.userService
+      .userRegisterattendance(result)
+      .pipe(
+        finalize(async () => {
+          await this.sharedService.managementToast(
+            'apiAlert',
+            responseOK,
+            errorResponse,
+            response
+          );
+
+          if (responseOK) {
+            this.route.navigateByUrl('home');
+          }
+        })
+      )
+      .subscribe(
+        (data) => {
+          response = data;
+          responseOK = true;
+        },
+        (error: HttpErrorResponse) => {
+          errorResponse = error.error;
+          this.sharedService.errorLog(errorResponse);
+        }
+      );
   }
 }

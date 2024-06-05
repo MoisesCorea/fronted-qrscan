@@ -1,35 +1,59 @@
-<div class="container-cards mb-5">
-  <h2 class="text-center mb-5">Carnet de usuario</h2>
-
+<div class="container-main mb-5">
+  <h2 class="text-center mt-5 mb-5">Carnets de usuario</h2>
   <div class="form-group mt-5 mb-5 col-md">
-    <input
-      type="text"
-      class="forms-control"
-      placeholder="Buscar.."
-      [(ngModel)]="filterInput"
-      name="filterpost"
-      class="forms-control"
-      placeholder="Buscar.."
-    />
-  </div>
-
-  <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-    <div
-      class="col"
-      *ngFor="
-        let user of users
-          | filter : filterInput
-          | paginate : { itemsPerPage: 3, currentPage: page }
-      "
-    >
-      <app-card [item]="convertToCardDTO(user)"></app-card>
+    <div class="row mb-5">
+      <div class="col-12 d-flex justify-content-star align-items-center py-3">
+        <input
+          type="text"
+          [(ngModel)]="filterInput"
+          class="form-control w-md-50 me-2"
+          placeholder="Buscar..."
+        />
+        <button
+          class="btn btn-secondary"
+          [useExistingCss]="true"
+          printSectionId="cards"
+          ngxPrint
+        >
+          <i class="fa-solid fa-print"></i>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <pagination-controls
-    class="text-center mb-5 mt-5"
-    (pageChange)="page = $event"
-    previousLabel="Aterior"
-    nextLabel="Siguiente"
-  ></pagination-controls>
+    <div id="cards">
+      <div class="row row-cols-1 row-cols-md-3 row-cols-sm-2 g-4 mb-5">
+        <div
+          class="card-group"
+          *ngFor="
+            let user of users
+              | filter : filterInput
+              | paginate : { itemsPerPage: 6, currentPage: page }
+          "
+        >
+          <div class="card h-100">
+            <img class="card-img-top" [src]="user.profile_image" alt="" />
+
+            <div class="card-body d-flex flex-column">
+              <div class="card-title text-center">
+                <b>{{ user.name }} {{ user.last_name }}</b>
+              </div>
+              <div class="card-text text-center flex-grow-1">
+                {{ getDepartmentName(user.department_id) | async }}
+              </div>
+              <figure class="d-flex justify-content-center">
+                <img [src]="user.qr_image" alt="" style="width: 60%" />
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <pagination-controls
+      class="text-center mb-5 mt-5"
+      (pageChange)="page = $event"
+      previousLabel="Aterior"
+      nextLabel="Siguiente"
+    ></pagination-controls>
+  </div>
 </div>

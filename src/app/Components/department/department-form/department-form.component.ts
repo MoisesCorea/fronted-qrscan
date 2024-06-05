@@ -92,6 +92,7 @@ export class DepartmentFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.departmentForm.invalid) {
       return;
@@ -107,9 +108,10 @@ export class DepartmentFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -119,7 +121,8 @@ export class DepartmentFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {
@@ -133,15 +136,18 @@ export class DepartmentFormComponent implements OnInit {
   private editDepartment(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
+
     if (this.departmentId) {
       this.departmentService
         .updateDepartment(this.departmentId, this.department)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
@@ -150,7 +156,8 @@ export class DepartmentFormComponent implements OnInit {
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {

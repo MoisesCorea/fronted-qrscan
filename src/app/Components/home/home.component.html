@@ -2,6 +2,8 @@
   <div class="content">
     <h4>{{ currentDate | date : "fullDate" : "es" }}</h4>
     <h5>{{ currentDate | date : "shortTime" }}</h5>
-    <zxing-scanner (scanSuccess)="handleQrCodeResult($event)"> </zxing-scanner>
+    <zxing-scanner [start]="true" (scanSuccess)="handleQrCodeResult($event)">
+    </zxing-scanner>
+    <app-alert></app-alert>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { EventService, deleteResponse } from 'src/app/Services/event.service';
 import { EventDTO } from 'src/app/Models/event.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event-list',
@@ -81,24 +82,43 @@ export class EventListComponent {
 
   deleteEvent(eventId: number): void {
     let errorResponse: any;
+    let responseOK: boolean = false;
+    let response: any;
 
     // show confirmation popup
     let result = confirm(
-      'Confirm delete department with id: ' + eventId + ' .'
+      'Confirma elminar el registro con ID: ' + eventId + ' .'
     );
     if (result) {
-      this.eventService.deleteEvent(eventId).subscribe(
-        (rowsAffected: deleteResponse) => {
-          if (rowsAffected.affected > 0) {
-            console.log('Llegamos a las filas afectadas');
-            this.loadEvents();
+      this.eventService
+        .deleteEvent(eventId)
+        .pipe(
+          finalize(async () => {
+            await this.sharedService.managementToast(
+              'apiAlert',
+              responseOK,
+              errorResponse,
+              response
+            );
+
+            if (responseOK) {
+              this.route.navigateByUrl('eventos');
+            }
+          })
+        )
+        .subscribe(
+          (rowsAffected: deleteResponse) => {
+            if (rowsAffected.affected > 0) {
+              response = rowsAffected;
+              responseOK = true;
+              this.loadEvents();
+            }
+          },
+          (error: HttpErrorResponse) => {
+            errorResponse = error.error;
+            this.sharedService.errorLog(errorResponse);
           }
-        },
-        (error: HttpErrorResponse) => {
-          errorResponse = error.error;
-          this.sharedService.errorLog(errorResponse);
-        }
-      );
+        );
     }
   }
 }

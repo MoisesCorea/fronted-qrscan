@@ -25,12 +25,23 @@ export class ShiftFormComponent implements OnInit {
   finish_time: UntypedFormControl;
   shift_duration: UntypedFormControl;
   mothly_late_allowance: UntypedFormControl;
+  days!: UntypedFormControl;
 
   shiftForm: UntypedFormGroup;
   isValidForm: boolean | null;
 
   private isUpdateMode: boolean;
   private shiftId: string | null;
+
+  weekDays = [
+    { id: 0, name: 'Domingo' },
+    { id: 1, name: 'Lunes' },
+    { id: 2, name: 'Martes' },
+    { id: 3, name: 'Miercoles' },
+    { id: 4, name: 'Jueves' },
+    { id: 5, name: 'Viernes' },
+    { id: 6, name: 'Sábado' },
+  ];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,7 +50,7 @@ export class ShiftFormComponent implements OnInit {
     private router: Router,
     private shiftService: ShiftService
   ) {
-    this.shift = new ShiftDTO(0, '', '', '', 0, 0);
+    this.shift = new ShiftDTO(0, '', '', '', 0, 0, '');
     this.shiftId = this.activatedRoute.snapshot.paramMap.get('id');
     this.isUpdateMode = false;
     this.isValidForm = null;
@@ -64,12 +75,15 @@ export class ShiftFormComponent implements OnInit {
       Validators.required,
     ]);
 
+    this.days = new UntypedFormControl(null, []);
+
     this.shiftForm = this.formBuilder.group({
       name: this.name,
       entry_time: this.entry_time,
       finish_time: this.finish_time,
       shift_duration: this.shift_duration,
       mothly_late_allowance: this.mothly_late_allowance,
+      days: this.days,
     });
   }
 
@@ -89,12 +103,17 @@ export class ShiftFormComponent implements OnInit {
           this.shift_duration.setValue(this.shift.shift_duration);
           this.mothly_late_allowance.setValue(this.shift.mothly_late_allowance);
 
+          let daysArray: number[] = JSON.parse(this.shift.days);
+
+          this.days.setValue(daysArray);
+
           this.shiftForm = this.formBuilder.group({
             name: this.name,
             entry_time: this.entry_time,
             finish_time: this.finish_time,
             shift_duration: this.shift_duration,
             mothly_late_allowance: this.mothly_late_allowance,
+            days: this.days,
           });
         },
         (error: HttpErrorResponse) => {
@@ -109,6 +128,7 @@ export class ShiftFormComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.shiftForm.invalid) {
       return;
@@ -124,9 +144,10 @@ export class ShiftFormComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'registerFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -136,7 +157,8 @@ export class ShiftFormComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
+        (data) => {
+          response = data;
           responseOK = true;
         },
         (error: HttpErrorResponse) => {
@@ -150,24 +172,28 @@ export class ShiftFormComponent implements OnInit {
   private editShift(): void {
     let errorResponse: any;
     let responseOK: boolean = false;
+    let response: any;
+
     if (this.shiftId) {
       this.shiftService
         .updateShift(this.shiftId, this.shift)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'postFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
 
             if (responseOK) {
-              this.router.navigateByUrl('roles');
+              this.router.navigateByUrl('turnos');
             }
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
           },
           (error: HttpErrorResponse) => {

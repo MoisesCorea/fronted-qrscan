@@ -62,6 +62,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     let responseOK: boolean = false;
     let errorResponse: any;
+    let response: any;
 
     this.loginUser.email = this.email.value;
     this.loginUser.password = this.password.value;
@@ -71,9 +72,10 @@ export class LoginComponent implements OnInit {
       .pipe(
         finalize(async () => {
           await this.sharedService.managementToast(
-            'loginFeedback',
+            'apiAlert',
             responseOK,
-            errorResponse
+            errorResponse,
+            response
           );
 
           if (responseOK) {
@@ -85,6 +87,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(
         (resp: AuthToken) => {
+          response = resp;
           responseOK = true;
           this.loginUser.user_id = resp.user_id;
           this.loginUser.access_token = resp.access_token;

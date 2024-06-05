@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
@@ -12,6 +11,7 @@ import { AdminDTO } from 'src/app/Models/admin.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { AdminService } from 'src/app/Services/admin.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -19,76 +19,74 @@ import { AdminService } from 'src/app/Services/admin.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  ngOnInit(): void {}
-  /*profileUser: AdminDTO;
+  profileUser: AdminDTO;
+
+  isEnabled: boolean = false;
 
   name: UntypedFormControl;
-  surname_1: UntypedFormControl;
-  surname_2: UntypedFormControl;
-  alias: UntypedFormControl;
-  birth_date: UntypedFormControl;
+  last_name: UntypedFormControl;
   email: UntypedFormControl;
-  password: UntypedFormControl;
+  alias: UntypedFormControl;
+  current_password: UntypedFormControl;
+  new_password: UntypedFormControl;
+  confirm_password: UntypedFormControl;
 
   profileForm: UntypedFormGroup;
+  passwordForm: UntypedFormGroup;
   isValidForm: boolean | null;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private userService: UserService,
+    private adminService: AdminService,
     private sharedService: SharedService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private router: Router
   ) {
-    this.profileUser = new UserDTO('', '', '', '', new Date(), '', '');
+    this.profileUser = new AdminDTO('', '', '', '', '', 0);
 
     this.isValidForm = null;
 
-    this.name = new UntypedFormControl(this.profileUser.name, [
+    this.name = new UntypedFormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(255),
+    ]);
+
+    this.last_name = new UntypedFormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.minLength(5),
       Validators.maxLength(25),
     ]);
 
-    this.surname_1 = new UntypedFormControl(this.profileUser.surname_1, [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(25),
-    ]);
-
-    this.surname_2 = new UntypedFormControl(this.profileUser.surname_2, [
-      Validators.minLength(5),
-      Validators.maxLength(25),
-    ]);
-
-    this.alias = new UntypedFormControl(this.profileUser.alias, [
-      Validators.required,
-      Validators.minLength(5),
-      Validators.maxLength(25),
-    ]);
-
-    this.birth_date = new UntypedFormControl(
-      formatDate(this.profileUser.birth_date, 'yyyy-MM-dd', 'en'),
-      [Validators.required]
-    );
-
-    this.email = new UntypedFormControl(this.profileUser.email, [
+    this.email = new UntypedFormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$'),
     ]);
 
-    this.password = new UntypedFormControl(this.profileUser.password, [
+    this.alias = new UntypedFormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(255),
+    ]);
+
+    this.current_password = new UntypedFormControl('', Validators.required);
+    this.new_password = new UntypedFormControl('', [
       Validators.required,
       Validators.minLength(8),
     ]);
+    this.confirm_password = new UntypedFormControl('', Validators.required);
 
     this.profileForm = this.formBuilder.group({
       name: this.name,
-      surname_1: this.surname_1,
-      surname_2: this.surname_2,
-      alias: this.alias,
-      birth_date: this.birth_date,
+      last_name: this.last_name,
       email: this.email,
-      password: this.password,
+      alias: this.alias,
+    });
+
+    this.passwordForm = this.formBuilder.group({
+      current_password: this.current_password,
+      new_password: this.new_password,
+      new_password_confirmation: this.confirm_password,
     });
   }
 
@@ -97,26 +95,20 @@ export class ProfileComponent implements OnInit {
 
     // load user data
     const userId = this.localStorageService.get('user_id');
+
     if (userId) {
-      this.userService.getUSerById(userId).subscribe(
-        (userData: UserDTO) => {
+      this.adminService.getAdminById(userId).subscribe(
+        (userData: AdminDTO) => {
           this.name.setValue(userData.name);
-          this.surname_1.setValue(userData.surname_1);
-          this.surname_2.setValue(userData.surname_2);
-          this.alias.setValue(userData.alias);
-          this.birth_date.setValue(
-            formatDate(userData.birth_date, 'yyyy-MM-dd', 'en')
-          );
+          this.last_name.setValue(userData.last_name);
           this.email.setValue(userData.email);
+          this.alias.setValue(userData.alias);
 
           this.profileForm = this.formBuilder.group({
             name: this.name,
-            surname_1: this.surname_1,
-            surname_2: this.surname_2,
-            alias: this.alias,
-            birth_date: this.birth_date,
+            last_name: this.last_name,
             email: this.email,
-            password: this.password,
+            alias: this.alias,
           });
         },
         (error: HttpErrorResponse) => {
@@ -131,6 +123,7 @@ export class ProfileComponent implements OnInit {
     let responseOK: boolean = false;
     this.isValidForm = false;
     let errorResponse: any;
+    let response: any;
 
     if (this.profileForm.invalid) {
       return;
@@ -142,28 +135,92 @@ export class ProfileComponent implements OnInit {
     const userId = this.localStorageService.get('user_id');
 
     if (userId) {
-      this.userService
-        .updateUser(userId, this.profileUser)
+      this.adminService
+        .updateAdmin(userId, this.profileUser)
         .pipe(
           finalize(async () => {
             await this.sharedService.managementToast(
-              'profileFeedback',
+              'apiAlert',
               responseOK,
-              errorResponse
+              errorResponse,
+              response
             );
+
+            if (responseOK) {
+              this.router.navigateByUrl('perfil');
+            }
           })
         )
         .subscribe(
-          () => {
+          (data) => {
+            response = data;
             responseOK = true;
+            this.toggleDisabled();
           },
           (error: HttpErrorResponse) => {
-            responseOK = false;
             errorResponse = error.error;
-
             this.sharedService.errorLog(errorResponse);
           }
         );
     }
-  }*/
+  }
+
+  onSubmitPassword(): void {
+    let responseOK: boolean = false;
+    this.isValidForm = false;
+    let errorResponse: any;
+    let response: any;
+
+    if (this.passwordForm.invalid) {
+      return;
+    }
+
+    this.isValidForm = true;
+
+    this.adminService
+      .changePassword(this.passwordForm.value)
+      .pipe(
+        finalize(async () => {
+          await this.sharedService.managementToast(
+            'apiAlert',
+            responseOK,
+            errorResponse,
+            response
+          );
+
+          if (responseOK) {
+            this.passwordForm.reset();
+            this.router.navigateByUrl('perfil');
+          }
+        })
+      )
+      .subscribe(
+        (data) => {
+          response = data;
+          responseOK = true;
+        },
+        (error: HttpErrorResponse) => {
+          errorResponse = error.error;
+          this.sharedService.errorLog(errorResponse);
+        }
+      );
+  }
+
+  toggleDisabled(): void {
+    Object.keys(this.profileForm.controls).forEach((controlName) => {
+      const control = this.profileForm.get(controlName);
+
+      if (control?.disabled) {
+        control?.enable();
+      } else {
+        control?.disable();
+      }
+    });
+  }
+
+  isFormDisabled(): boolean {
+    return Object.keys(this.profileForm.controls).every(
+      (controlName) => this.profileForm.get(controlName)?.disabled
+    );
+  }
 }

@@ -1,0 +1,207 @@
+<app-alert></app-alert>
+<div class="container-main">
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="mb-5 mt-5">
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label class="form-label" for="departments">Departemento:</label>
+        <select class="form-control" [formControl]="departments" required>
+          <option [ngValue]="null" selected>-- Seleccionar --</option>
+          <option [ngValue]="0">Todos</option>
+          <option
+            *ngFor="let departement of departmentsList"
+            [ngValue]="departement.id"
+          >
+            {{ departement.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="departments.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="departments.errors.required">
+            Selecciona un departamento
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-2">
+        <label class="form-label" for="initial_date">Fecha Inicial:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="initial_date"
+          [formControl]="initial_date"
+        />
+        <div
+          *ngIf="initial_date.errors && isValidForm != null && !isValidForm"
+          class="text-danger"
+        >
+          <div *ngIf="initial_date.errors.required">
+            La fecha inicial es requerida
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label class="form-label" for="end_date">Fecha Final:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="end_date"
+          [formControl]="end_date"
+        />
+        <div
+          *ngIf="end_date.errors && isValidForm != null && !isValidForm"
+          class="text-danger"
+        >
+          <div *ngIf="end_date.errors.required">
+            La fecha final es requerida
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-md-3">
+        <label class="form-label" for="roles">Evento:</label>
+        <select class="form-control" [formControl]="events" required>
+          <option [ngValue]="null" selected>-- Seleccionar --</option>
+          <option *ngFor="let event of eventsList" [ngValue]="event.id">
+            {{ event.name }}
+          </option>
+        </select>
+        <div
+          *ngIf="events.errors && isValidForm != null && !isValidForm"
+          [ngClass]="'error'"
+        >
+          <div *ngIf="events.errors.required">Selecciona un rol de usuario</div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary addBtn">Generar</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="reportData" class="container mt-5">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-end align-items-center py-3">
+        <button
+          class="btn btn-secondary"
+          [useExistingCss]="true"
+          printSectionId="report"
+          ngxPrint
+        >
+          <i class="fa-solid fa-print"></i>
+        </button>
+      </div>
+    </div>
+    <div id="report">
+      <h2 class="text-center mb-4 mt-5">Reporte de Asistencia</h2>
+      <div *ngIf="reportData[0].daily_attendance === 'Si'">
+        <div
+          class="element"
+          *ngFor="
+            let user of reportData
+              | paginate : { itemsPerPage: 3, currentPage: page }
+          "
+        >
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Usuario:</strong> {{ user.user_name }}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Horario:</strong> {{ user.shift_name }}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Evento:</strong> {{ user.event_name }}</p>
+            </div>
+            <div class="col-md-6" *ngIf="user.daily_attendance === 'Si'">
+              <p>
+                <strong>Límite mensual por minutos de retraso:</strong>
+                {{ user.mothly_late_allowance }} Minutos
+              </p>
+            </div>
+            <div class="col-md-6" *ngIf="user.daily_attendance === 'Si'">
+              <p>
+                <strong>Tiempo No Dedicado (Total):</strong>
+                {{ (user.total_non_didicated_time.toFixed(0) / 60).toFixed(0) }}
+                horas / {{ user.total_non_didicated_time }} minutos
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p>
+                <strong>Tiempo Dedicado (Total):</strong>
+                {{ user.total_dedicated_hours.toFixed(0) }} horas /
+                {{ (user.total_dedicated_hours.toFixed(0) * 60).toFixed(0) }}
+                minutos
+              </p>
+            </div>
+          </div>
+          <table class="table table-bordered table-striped">
+            <thead class="thead-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
+                <th *ngIf="user.daily_attendance === 'Si'">Minutos Tarde</th>
+                <th *ngIf="user.daily_attendance === 'Si'">
+                  Minutos de Salida Temprana
+                </th>
+                <th *ngIf="user.daily_attendance === 'Si'">
+                  Tiempo no dedicado (minutos)
+                </th>
+                <th>Tiempo dedicado (horas)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let attendances of user.attendances">
+                <td>{{ user.attendance_date }}</td>
+                <td>{{ attendances.entry_time }}</td>
+                <td>{{ attendances.finish_time }}</td>
+                <td *ngIf="user.daily_attendance === 'Si'">
+                  {{ attendances.minutes_late }}
+                </td>
+                <td *ngIf="user.daily_attendance === 'Si'">
+                  {{ attendances.minutes_early_leaving }}
+                </td>
+                <td *ngIf="user.daily_attendance === 'Si'">
+                  {{ attendances.time_non_dedicated }}
+                </td>
+                <td>{{ attendances.time_dedicated }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="reportData[0].daily_attendance === 'No'">
+        <table class="table table-bordered table-striped">
+          <thead class="thead-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Departamento</th>
+              <th>Evento</th>
+              <th>Tiempo dedicado (horas)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let user of reportData
+                  | paginate : { itemsPerPage: 10, currentPage: page }
+              "
+            >
+              <td>{{ user.user_name }}</td>
+              <td>{{ user.department_name }}</td>
+              <td>{{ user.event_name }}</td>
+              <td>{{ user.total_dedicated_hours.toFixed(0) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <pagination-controls
+      class="text-center mb-5 mt-5"
+      (pageChange)="page = $event"
+      previousLabel="Aterior"
+      nextLabel="Siguiente"
+    ></pagination-controls>
+  </div>
+</div>

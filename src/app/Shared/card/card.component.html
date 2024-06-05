@@ -1,18 +1,17 @@
-<a [routerLink]="['/carnets', item.id]">
-  <div class="card">
-    <figure>
-      <img class="card-img-top" [src]="item.profile_image" alt="" />
-    </figure>
-    <div class="card-body">
+<div class="card h-100">
+  <a [routerLink]="['/carnets', item.id]" class="d-flex flex-column h-100">
+    <img class="card-img-top" [src]="item.profile_image" alt="" />
+
+    <div class="card-body d-flex flex-column">
       <div class="card-title text-center">
         <b>{{ item.name }} {{ item.last_name }}</b>
       </div>
-      <div class="card-text text-center">
+      <div class="card-text text-center flex-grow-1">
         {{ getDepartmentName(item.department_id) | async }}
       </div>
-      <figure style="text-align: center">
-        <img [src]="item.qr_image" alt="" width="150" height="150" />
+      <figure class="d-flex justify-content-center">
+        <img [src]="item.qr_image" alt="" style="width: 60%" />
       </figure>
     </div>
-  </div>
-</a>
+  </a>
+</div>

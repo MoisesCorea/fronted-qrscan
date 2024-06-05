@@ -18,8 +18,8 @@ import { ShiftFormComponent } from './Components/shift/shift-form/shift-form.com
 import { UserListComponent } from './Components/user/user-list/user-list.component';
 import { UserFormComponent } from './Components/user/user-form/user-form.component';
 import { UsersCardComponent } from './Components/reports/users-card/user-card.component';
-import { UserCardComponent } from './Components/reports/user-card/user-card.component';
 import { AttendanceUserComponent } from './Components/reports/attendance-user/attendance-user.component';
+import { AttendaceUsersComponent } from './Components/reports/attendace-users/attendace-users.component';
 
 const routes: Routes = [
   {
@@ -137,11 +137,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'carnets/:id',
+    path: 'reporte/usuarios',
     data: {
-      allowedRoles: ['Admin', , 'Admin-1', 'Admin-2'],
+      allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
-    component: UserCardComponent,
+    component: AttendaceUsersComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -166,7 +166,10 @@ const routes: Routes = [
   },
 
   {
-    path: 'profile',
+    path: 'perfil',
+    data: {
+      allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
+    },
     component: ProfileComponent,
     canActivate: [AuthGuard],
   },
