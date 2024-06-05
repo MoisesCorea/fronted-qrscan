@@ -51,11 +51,11 @@ export class ShiftListComponent {
   }
 
   createShift(): void {
-    this.route.navigateByUrl('/turno/item/');
+    this.route.navigateByUrl('/horarios/item/');
   }
 
   updateShift(rolId: number): void {
-    this.route.navigateByUrl('/turno/item/' + rolId);
+    this.route.navigateByUrl('/horarios/item/' + rolId);
   }
 
   deleteShift(shiftId: number): void {

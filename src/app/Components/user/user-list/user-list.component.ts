@@ -94,11 +94,11 @@ export class UserListComponent {
   }
 
   createUser(): void {
-    this.route.navigateByUrl('/usuario/item/');
+    this.route.navigateByUrl('/usuarios/item/');
   }
 
   updateUser(rolId: string): void {
-    this.route.navigateByUrl('/usuario/item/' + rolId);
+    this.route.navigateByUrl('/usuarios/item/' + rolId);
   }
 
   deleteUser(userId: string): void {

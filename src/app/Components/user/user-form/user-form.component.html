@@ -111,7 +111,7 @@
           <label class="form-label" for="phone_number">Télefono: </label>
           <input
             class="form-control"
-            type="tel"
+            type="number"
             appPhoneFormat
             formControlName="phone_number"
           />
@@ -123,7 +123,7 @@
               El teléfono es requerido
             </div>
             <div *ngIf="phone_number.errors.minlength">
-              El teléfono debe tener al menos 5 caracteres
+              El teléfono debe tener al menos 8 digitos
             </div>
             <div *ngIf="phone_number.errors.max">
               El teléfono debe tener como máximo 15 digitos

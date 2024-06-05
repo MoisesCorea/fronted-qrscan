@@ -42,11 +42,11 @@ export class RolesListComponent {
   }
 
   createRol(): void {
-    this.route.navigateByUrl('/rol/item/');
+    this.route.navigateByUrl('/roles/item/');
   }
 
   updateRol(rolId: number): void {
-    this.route.navigateByUrl('/rol/item/' + rolId);
+    this.route.navigateByUrl('/roles/item/' + rolId);
   }
 
   deleteRol(rolId: number): void {

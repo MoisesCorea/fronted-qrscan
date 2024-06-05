@@ -81,11 +81,11 @@ export class AdminListComponent {
   }
 
   createAdmin(): void {
-    this.router.navigateByUrl('/admin/item/');
+    this.router.navigateByUrl('/admins/item/');
   }
 
   updateAdmin(adminId: number | undefined): void {
-    this.router.navigateByUrl('/admin/item/' + adminId);
+    this.router.navigateByUrl('/admins/item/' + adminId);
   }
 
   deleteAdmin(adminId: number | undefined): void {

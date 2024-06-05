@@ -152,7 +152,7 @@ export class ShiftFormComponent implements OnInit {
 
           if (responseOK) {
             this.shiftForm.reset();
-            this.router.navigateByUrl('roles');
+            this.router.navigateByUrl('horarios');
           }
         })
       )
@@ -187,7 +187,7 @@ export class ShiftFormComponent implements OnInit {
             );
 
             if (responseOK) {
-              this.router.navigateByUrl('turnos');
+              this.router.navigateByUrl('horarios');
             }
           })
         )

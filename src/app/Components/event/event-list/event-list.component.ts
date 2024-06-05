@@ -41,11 +41,11 @@ export class EventListComponent {
     );
   }
   createEvent(): void {
-    this.route.navigateByUrl('/evento/item/');
+    this.route.navigateByUrl('/eventos/item/');
   }
 
   updateEvent(eventoId: number): void {
-    this.route.navigateByUrl('/evento/item/' + eventoId);
+    this.route.navigateByUrl('/eventos/item/' + eventoId);
   }
 
   updateStatus(eventID: number, event: any): void {

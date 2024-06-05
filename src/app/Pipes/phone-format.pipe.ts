@@ -4,22 +4,19 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'phoneFormat',
 })
 export class PhoneFormatPipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: any): string {
     if (!value) {
       return '';
     }
 
-    // Remove all non-numeric characters
-    value = value.replace(/\D/g, '');
+    const stringValue = value.toString();
 
-    // Format the phone number
-    if (value.length === 10) {
-      return `(${value.substring(0, 3)}) ${value.substring(
-        3,
-        6
-      )}-${value.substring(6, 10)}`;
+    const cleanedValue = stringValue.replace(/\D/g, '');
+
+    if (cleanedValue.length === 8) {
+      return `${cleanedValue.substring(0, 4)}-${cleanedValue.substring(4, 8)}`;
     } else {
-      return value; // or handle invalid length as needed
+      return value;
     }
   }
 }

@@ -54,7 +54,7 @@
             <td>{{ user.name }}</td>
             <td>{{ user.last_name }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.phone_number }}</td>
+            <td>{{ user.phone_number | phoneFormat }}</td>
             <td>{{ getShiftName(user.shift_id) | async }}</td>
             <td>{{ getDepartmentName(user.department_id) | async }}</td>
             <td>{{ user.status }}</td>

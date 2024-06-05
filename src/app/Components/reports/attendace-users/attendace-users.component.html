@@ -153,7 +153,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let attendances of user.attendances">
-                <td>{{ user.attendance_date }}</td>
+                <td>{{ user.attendance_date | formatDate : 3 }}</td>
                 <td>{{ attendances.entry_time }}</td>
                 <td>{{ attendances.finish_time }}</td>
                 <td *ngIf="user.daily_attendance === 'Si'">
@@ -169,6 +169,7 @@
               </tr>
             </tbody>
           </table>
+          <hr class="my-4 mt-5" />
         </div>
       </div>
       <div *ngIf="reportData[0].daily_attendance === 'No'">

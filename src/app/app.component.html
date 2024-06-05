@@ -96,7 +96,7 @@
           </span>
         </a>
         <a *ngIf="userRolIn(['Admin-1', 'Admin']) === true" mat-list-item>
-          <span class="entry" [routerLink]="['/turnos']">
+          <span class="entry" [routerLink]="['/horarios']">
             <i class="fa-solid fa-clock"></i>
             <span>Horarios</span>
           </span>
@@ -135,21 +135,21 @@
           <a
             mat-menu-item
             *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
-            [routerLink]="['/carnets']"
+            [routerLink]="['/reporte/carnets']"
           >
             <span>Carnets de usuario</span>
           </a>
           <a
             mat-menu-item
             *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
-            [routerLink]="['reporte/usuario']"
+            [routerLink]="['/reporte/individual']"
           >
             <span>Reporte de usuario</span>
           </a>
           <a
             mat-menu-item
             *ngIf="userRolIn(['Admin-1', 'Admin-2', 'Admin']) === true"
-            [routerLink]="['reporte/usuarios']"
+            [routerLink]="['reporte/general']"
           >
             <span>Reporte General</span>
           </a>

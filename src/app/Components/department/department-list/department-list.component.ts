@@ -44,11 +44,11 @@ export class DepartmentListComponent {
   }
 
   createDepartment(): void {
-    this.route.navigateByUrl('/departamento/item/');
+    this.route.navigateByUrl('/departamentos/item/');
   }
 
   updateDepartment(departmentId: number): void {
-    this.route.navigateByUrl('/departamento/item/' + departmentId);
+    this.route.navigateByUrl('/departamentos/item/' + departmentId);
   }
 
   deleteDepartment(departmentId: number): void {

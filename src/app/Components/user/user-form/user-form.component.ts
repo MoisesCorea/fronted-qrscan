@@ -99,7 +99,6 @@ export class UserFormComponent implements OnInit {
 
     this.phone_number = new UntypedFormControl('', [
       Validators.required,
-      Validators.minLength(5),
       Validators.max(999999999999999),
     ]);
 

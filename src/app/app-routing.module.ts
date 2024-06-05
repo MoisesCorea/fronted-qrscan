@@ -1,49 +1,25 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './Components/dashboard/dashboard.component';
-import { HomeComponent } from './Components/home/home.component';
-import { LoginComponent } from './Components/login/login.component';
-import { ProfileComponent } from './Components/profile/profile.component';
-import { AdminFormComponent } from './Components/admins/admin-form/admin-form.component';
 import { AuthGuard } from './Guards/auth.guard';
-import { AdminListComponent } from './Components/admins/admin-list/admin-list.component';
-import { RolesListComponent } from './Components/roles/roles-list/roles-list.component';
-import { RolesFormComponent } from './Components/roles/roles-form/roles-form.component';
-import { DepartmentListComponent } from './Components/department/department-list/department-list.component';
-import { DepartmentFormComponent } from './Components/department/department-form/department-form.component';
-import { EventListComponent } from './Components/event/event-list/event-list.component';
-import { EventFormComponent } from './Components/event/event-form/event-form.component';
-import { ShiftListComponent } from './Components/shift/shift-list/shift-list.component';
-import { ShiftFormComponent } from './Components/shift/shift-form/shift-form.component';
-import { UserListComponent } from './Components/user/user-list/user-list.component';
-import { UserFormComponent } from './Components/user/user-form/user-form.component';
-import { UsersCardComponent } from './Components/reports/users-card/user-card.component';
-import { AttendanceUserComponent } from './Components/reports/attendance-user/attendance-user.component';
-import { AttendaceUsersComponent } from './Components/reports/attendace-users/attendace-users.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    loadChildren: () =>
+      import('./Components/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadChildren: () =>
+      import('./Components/login/login.module').then((m) => m.LoginModule),
   },
   {
     path: 'admins',
     data: {
       allowedRoles: ['Admin'],
     },
-    component: AdminListComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'admin/item/:id',
-    data: {
-      allowedRoles: ['Admin'],
-    },
-    component: AdminFormComponent,
+    loadChildren: () =>
+      import('./Components/admins/admins.module').then((m) => m.AdminsModule),
     canActivate: [AuthGuard],
   },
 
@@ -52,15 +28,8 @@ const routes: Routes = [
     data: {
       allowedRoles: ['Admin'],
     },
-    component: RolesListComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'rol/item/:id',
-    data: {
-      allowedRoles: ['Admin'],
-    },
-    component: RolesFormComponent,
+    loadChildren: () =>
+      import('./Components/roles/roles.module').then((m) => m.RolesModule),
     canActivate: [AuthGuard],
   },
   {
@@ -68,15 +37,10 @@ const routes: Routes = [
     data: {
       allowedRoles: ['Admin', 'Admin-1'],
     },
-    component: DepartmentListComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'departamento/item/:id',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1'],
-    },
-    component: DepartmentFormComponent,
+    loadChildren: () =>
+      import('./Components/department/department.module').then(
+        (m) => m.DepartmentModule
+      ),
     canActivate: [AuthGuard],
   },
 
@@ -85,83 +49,54 @@ const routes: Routes = [
     data: {
       allowedRoles: ['Admin', 'Admin-1'],
     },
-    component: EventListComponent,
+    loadChildren: () =>
+      import('./Components/event/event.module').then((m) => m.EventModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'evento/item/:id',
+    path: 'horarios',
     data: {
       allowedRoles: ['Admin', 'Admin-1'],
     },
-    component: EventFormComponent,
+    loadChildren: () =>
+      import('./Components/shift/shift.module').then((m) => m.ShiftModule),
     canActivate: [AuthGuard],
   },
-  {
-    path: 'turnos',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1'],
-    },
-    component: ShiftListComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'turno/item/:id',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1'],
-    },
-    component: ShiftFormComponent,
-    canActivate: [AuthGuard],
-  },
+
   {
     path: 'usuarios',
     data: {
       allowedRoles: ['Admin', 'Admin-1'],
     },
-    component: UserListComponent,
+    loadChildren: () =>
+      import('./Components/user/user.module').then((m) => m.UserModule),
     canActivate: [AuthGuard],
   },
   {
-    path: 'usuario/item/:id',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1'],
-    },
-    component: UserFormComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'carnets',
+    path: 'reporte',
     data: {
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
-    component: UsersCardComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'reporte/usuarios',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
-    },
-    component: AttendaceUsersComponent,
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'reporte/usuario',
-    data: {
-      allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
-    },
-    component: AttendanceUserComponent,
+    loadChildren: () =>
+      import('./Components/reports/reports.module').then(
+        (m) => m.ReportsModule
+      ),
     canActivate: [AuthGuard],
   },
   {
     path: 'home',
-    component: HomeComponent,
+    loadChildren: () =>
+      import('./Components/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'dashboard',
     data: {
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
-    component: DashboardComponent,
+    loadChildren: () =>
+      import('./Components/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
     canActivate: [AuthGuard],
   },
 
@@ -170,8 +105,18 @@ const routes: Routes = [
     data: {
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
-    component: ProfileComponent,
+    loadChildren: () =>
+      import('./Components/profile/profile.module').then(
+        (m) => m.ProfileModule
+      ),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'reporte',
+    loadChildren: () =>
+      import('./Components/reports/reports.module').then(
+        (m) => m.ReportsModule
+      ),
   },
 ];
 
