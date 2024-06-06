@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {
@@ -9,6 +9,7 @@ import { DepartmentDTO } from 'src/app/Models/department.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { finalize } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-department-list',
@@ -24,21 +25,25 @@ export class DepartmentListComponent {
     private departmentService: DepartmentService,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
-    private route: Router
+    private route: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.loadDepartments();
   }
 
   private loadDepartments(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.departmentService.getDepartments().subscribe(
       (department: DepartmentDTO[]) => {
         this.departments = department;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }

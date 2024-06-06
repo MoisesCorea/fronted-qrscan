@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ShiftService, deleteResponse } from 'src/app/Services/shift.service';
@@ -6,6 +6,7 @@ import { ShiftDTO } from 'src/app/Models/shift.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { finalize } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-shift-list',
@@ -31,21 +32,25 @@ export class ShiftListComponent {
     private shiftService: ShiftService,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
-    private route: Router
+    private route: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.loadShifts();
   }
 
   private loadShifts(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.shiftService.getShifts().subscribe(
       (shifts: ShiftDTO[]) => {
         this.shifts = shifts;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }
@@ -80,7 +85,7 @@ export class ShiftListComponent {
             );
 
             if (responseOK) {
-              this.route.navigateByUrl('turnos');
+              this.route.navigateByUrl('horarios');
             }
           })
         )

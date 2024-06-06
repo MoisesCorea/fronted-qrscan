@@ -11,8 +11,8 @@ import { AuthService } from 'src/app/Services/auth.service';
 import { RolesService } from 'src/app/Services/roles.service';
 import { AdminDTO } from './Models/admin.dto';
 import { SharedService } from 'src/app/Services/shared.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { LoaderService } from './Services/loader.service';
+import { Observable, of, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Role } from 'src/app/Models/rol.type';
 import { UserDTO } from './Models/user.dto';
@@ -24,6 +24,8 @@ import { UserDTO } from './Models/user.dto';
 })
 export class AppComponent {
   title = 'QrScan';
+  loading = false;
+
   @ViewChild(MatSidenav)
   sidenav!: MatSidenav;
   isMobile = true;
@@ -42,7 +44,8 @@ export class AppComponent {
     private authService: AuthService,
     private rolesService: RolesService,
     private sharedService: SharedService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public loaderService: LoaderService
   ) {
     this.adminId = this.localStorageService.get('user_id');
   }

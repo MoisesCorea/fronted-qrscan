@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { UserDTO } from 'src/app/Models/user.dto';
 import { DepartmentDTO } from 'src/app/Models/department.dto';
 import { UserService } from 'src/app/Services/user.service';
@@ -9,6 +9,7 @@ import { Observable, of } from 'rxjs';
 import { ShiftService } from 'src/app/Services/shift.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { CardDTO } from 'src/app/Models/card.dto';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-user-card',
@@ -28,21 +29,25 @@ export class UsersCardComponent {
     private userService: UserService,
     private sharedService: SharedService,
     private shiftService: ShiftService,
-    private departmentService: DepartmentService
+    private departmentService: DepartmentService,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.loadUsers();
   }
 
   private loadUsers(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.userService.getUsers().subscribe(
       (users: UserDTO[]) => {
         this.users = users;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }

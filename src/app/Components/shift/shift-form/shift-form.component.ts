@@ -88,8 +88,12 @@ export class ShiftFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let errorResponse: any;
     // update
+    this.loadShift();
+  }
+
+  loadShift(): void {
+    let errorResponse: any;
     if (this.shiftId) {
       this.isUpdateMode = true;
 

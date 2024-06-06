@@ -27,7 +27,7 @@ export class DepartmentFormComponent implements OnInit {
   isValidForm: boolean | null;
 
   private isUpdateMode: boolean;
-  private departmentId: string | null;
+  private departmentId?: string | null;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,7 +37,6 @@ export class DepartmentFormComponent implements OnInit {
     private departmentService: DepartmentService
   ) {
     this.department = new DepartmentDTO(0, '', '');
-    this.departmentId = this.activatedRoute.snapshot.paramMap.get('id');
     this.isUpdateMode = false;
     this.isValidForm = null;
 
@@ -60,11 +59,17 @@ export class DepartmentFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let errorResponse: any;
-    // update
-    if (this.departmentId) {
-      this.isUpdateMode = true;
+    this.departmentId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.isUpdateMode = !!this.departmentId; // Determinar el modo de actualización
 
+    if (this.isUpdateMode) {
+      this.loadDepartment();
+    }
+  }
+
+  loadDepartment(): void {
+    let errorResponse: any;
+    if (this.departmentId) {
       this.departmentService
         .getDepartmentById(parseInt(this.departmentId))
         .subscribe(

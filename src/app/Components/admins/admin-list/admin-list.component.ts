@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AdminDTO } from 'src/app/Models/admin.dto';
@@ -10,6 +10,7 @@ import { Role } from 'src/app/Models/rol.type';
 import { RolesDTO } from 'src/app/Models/roles.dto';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-admin-list',
@@ -32,7 +33,8 @@ export class AdminListComponent {
     private router: Router,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.userId = this.localStorageService.get('user_id');
     this.loadAdmins();
@@ -46,15 +48,18 @@ export class AdminListComponent {
   }
 
   private loadAdmins(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.adminService.getAdmins().subscribe(
       (admins: AdminDTO[]) => {
         this.admins = admins;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }
@@ -84,7 +89,7 @@ export class AdminListComponent {
     this.router.navigateByUrl('/admins/item/');
   }
 
-  updateAdmin(adminId: number | undefined): void {
+  updateAdmin(adminId: number): void {
     this.router.navigateByUrl('/admins/item/' + adminId);
   }
 

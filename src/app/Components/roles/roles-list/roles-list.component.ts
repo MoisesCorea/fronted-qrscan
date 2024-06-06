@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RolesService, deleteResponse } from 'src/app/Services/roles.service';
@@ -6,6 +6,7 @@ import { RolesDTO } from 'src/app/Models/roles.dto';
 import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { finalize } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-roles-list',
@@ -22,21 +23,25 @@ export class RolesListComponent {
     private rolesService: RolesService,
     private localStorageService: LocalStorageService,
     private sharedService: SharedService,
-    private route: Router
+    private route: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.loadRoles();
   }
 
   private loadRoles(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.rolesService.getRoles().subscribe(
       (roles: RolesDTO[]) => {
         this.roles = roles;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }

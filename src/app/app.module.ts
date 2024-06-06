@@ -4,12 +4,10 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   NO_ERRORS_SCHEMA,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptorService } from './Services/auth-interceptor.service';
-//import { FormatDatePipe } from './Pipes/format-date.pipe';
 import { CardComponent } from './Shared/card/card.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,21 +17,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormsModule } from '@angular/forms';
-//import { PhoneFormatPipe } from './Pipes/phone-format.pipe';
-import { NgxPaginationModule } from 'ngx-pagination';
 import { SharedModule } from './Shared/shared.module';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    //FormatDatePipe,
-    CardComponent,
-    //PhoneFormatPipe,
-  ],
+  declarations: [AppComponent, CardComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
     MatIconModule,
@@ -43,8 +34,8 @@ import { SharedModule } from './Shared/shared.module';
     FormsModule,
     MatListModule,
     MatMenuModule,
-    NgxPaginationModule,
     SharedModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     {

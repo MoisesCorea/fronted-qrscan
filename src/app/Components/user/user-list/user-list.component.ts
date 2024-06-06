@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserService, deleteResponse } from 'src/app/Services/user.service';
@@ -10,6 +10,7 @@ import { ShiftDTO } from 'src/app/Models/shift.dto';
 import { SharedService } from 'src/app/Services/shared.service';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-user-list',
@@ -30,21 +31,25 @@ export class UserListComponent {
     private sharedService: SharedService,
     private departmentService: DepartmentService,
     private shiftService: ShiftService,
-    private route: Router
+    private route: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.loadUsers();
   }
 
   private loadUsers(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.userService.getUsers().subscribe(
       (users: UserDTO[]) => {
         this.users = users;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }

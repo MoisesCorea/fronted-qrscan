@@ -1,4 +1,10 @@
-import { Component, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ViewEncapsulation,
+  OnInit,
+  Inject,
+} from '@angular/core';
 //import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 //import { BarcodeFormat } from '@zxing/library';
 import { UserService } from 'src/app/Services/user.service';
@@ -6,6 +12,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { SharedService } from 'src/app/Services/shared.service';
 import { finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-home',
@@ -20,13 +27,16 @@ export class HomeComponent implements OnInit {
   constructor(
     private userService: UserService,
     private sharedService: SharedService,
-    private route: Router
+    private route: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {}
 
   ngOnInit() {
+    this.loaderService.show();
     setInterval(() => {
       this.currentDate = new Date();
     }, 1000);
+    this.loaderService.hide();
   }
 
   handleQrCodeResult(result: any) {

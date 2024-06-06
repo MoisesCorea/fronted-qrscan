@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormControl,
@@ -12,6 +12,7 @@ import { LocalStorageService } from 'src/app/Services/local-storage.service';
 import { SharedService } from 'src/app/Services/shared.service';
 import { AdminService } from 'src/app/Services/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-profile',
@@ -40,7 +41,8 @@ export class ProfileComponent implements OnInit {
     private adminService: AdminService,
     private sharedService: SharedService,
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.profileUser = new AdminDTO('', '', '', '', '', 0);
 
@@ -97,6 +99,8 @@ export class ProfileComponent implements OnInit {
     const userId = this.localStorageService.get('user_id');
 
     if (userId) {
+      this.loaderService.show();
+
       this.adminService.getAdminById(userId).subscribe(
         (userData: AdminDTO) => {
           this.name.setValue(userData.name);
@@ -110,10 +114,12 @@ export class ProfileComponent implements OnInit {
             email: this.email,
             alias: this.alias,
           });
+          this.loaderService.hide();
         },
         (error: HttpErrorResponse) => {
           errorResponse = error.error;
           this.sharedService.errorLog(errorResponse);
+          this.loaderService.hide();
         }
       );
     }
@@ -160,6 +166,7 @@ export class ProfileComponent implements OnInit {
           (error: HttpErrorResponse) => {
             errorResponse = error.error;
             this.sharedService.errorLog(errorResponse);
+            this.loaderService.hide();
           }
         );
     }

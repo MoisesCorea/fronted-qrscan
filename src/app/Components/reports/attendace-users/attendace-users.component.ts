@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ReportDTO } from 'src/app/Models/report.dto';
 import { EventDTO } from 'src/app/Models/event.dto';
 import { DepartmentDTO } from 'src/app/Models/department.dto';
@@ -15,6 +15,7 @@ import {
 import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-attendace-users',
@@ -42,7 +43,8 @@ export class AttendaceUsersComponent {
     private sharedService: SharedService,
     private eventtService: EventService,
     private departmentService: DepartmentService,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.isValidForm = null;
     this.report = new ReportDTO('', 0, new Date(), new Date(), 0);
@@ -103,15 +105,18 @@ export class AttendaceUsersComponent {
   }
 
   private loadEvents(): void {
+    this.loaderService.show();
     let errorResponse: any;
 
     this.eventtService.getEvents().subscribe(
       (events: EventDTO[]) => {
         this.eventsList = events;
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
+        this.loaderService.hide();
       }
     );
   }

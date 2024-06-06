@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { PostDTO } from 'src/app/Models/post.dto';
 import { SharedService } from 'src/app/Services/shared.service';
 import { ReportService } from 'src/app/Services/report.service';
+import { LoaderService } from 'src/app/Services/loader.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private sharedService: SharedService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    @Inject(LoaderService) private loaderService: LoaderService
   ) {
     this.getReport();
   }
@@ -26,16 +28,18 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {}
 
   getReport(): void {
+    this.loaderService.show();
     let errorResponse: any;
     this.reportService.getDailyAttendace().subscribe(
       (data) => {
         this.reportData = data;
-        console.log(data); // Para depuración
+        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
         console.error('Error:', error);
+        this.loaderService.hide();
       }
     );
   }
