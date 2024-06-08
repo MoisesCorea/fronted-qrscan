@@ -4,6 +4,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { EventDTO } from '../Models/event.dto';
 import { SharedService } from './shared.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 interface updateResponse {
   affected: number;
@@ -22,7 +23,7 @@ export class EventService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'eventos';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   getEvents(): Observable<EventDTO[]> {
@@ -37,34 +38,21 @@ export class EventService {
       .pipe(catchError(this.sharedService.handleError));
   }
   createEvent(event: EventDTO): Observable<EventDTO> {
-    return this.http.post<EventDTO>(this.urlQrScanApi, event).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        console.log('Registro completado:', result);
-      })
-    );
+    return this.http
+      .post<EventDTO>(this.urlQrScanApi, event)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   updateEvent(eventId: string, event: EventDTO): Observable<EventDTO> {
     return this.http
       .patch<EventDTO>(this.urlQrScanApi + '/' + eventId, event)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          console.log('Registro completado:', result);
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   deleteEvent(eventId: number): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + eventId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          console.log('Registro completado:', result);
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   toggleEventStatus(eventId: number, event: number): Observable<EventDTO> {

@@ -112,18 +112,15 @@ export class AttendanceUserComponent implements OnInit {
   }
 
   private loadEvents(): void {
-    this.loaderService.show();
     let errorResponse: any;
 
     this.eventtService.getEvents().subscribe(
       (events: EventDTO[]) => {
         this.eventsList = events;
-        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
-        this.loaderService.hide();
       }
     );
   }

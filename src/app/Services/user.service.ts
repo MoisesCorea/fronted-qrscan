@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { UserDTO } from '../Models/user.dto';
 import { ReportDTO } from '../Models/report.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 
 export interface deleteResponse {
   affected: number;
@@ -19,7 +20,7 @@ export class UserService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'usuarios';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   getUsers(): Observable<UserDTO[]> {
@@ -29,49 +30,27 @@ export class UserService {
   }
 
   getUserById(userId: string): Observable<UserDTO> {
-    return this.http.get<UserDTO>(this.urlQrScanApi + '/' + userId).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Error:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .get<UserDTO>(this.urlQrScanApi + '/' + userId)
+      .pipe(catchError(this.sharedService.handleError));
   }
   createUser(user: FormData): Observable<any> {
-    return this.http.post<any>(this.urlQrScanApi, user).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Error:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .post<any>(this.urlQrScanApi, user)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   updateUser(userId: string, user: FormData): Observable<any> {
     user.append('_method', 'PATCH');
-    return this.http.post<any>(this.urlQrScanApi + '/' + userId, user).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Error:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .post<any>(this.urlQrScanApi + '/' + userId, user)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   deleteUser(userId: string): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + userId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Error:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   userRegisterattendance(userId: string): Observable<any> {

@@ -1,0 +1,48 @@
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+$primary-palette: (
+  50: #e6efff,
+  100: #c6d8f1,
+  200: #aabdda,
+  300: #8ca2c3,
+  400: #758db0,
+  500: #5e7a9f,
+  600: #506c8e,
+  700: #405877,
+  800: #314560,
+  900: #1e3148,
+  contrast: (
+    50: #ffffff,
+    100: #fafafa,
+    200: #f5f5f5,
+    300: #f0f0f0,
+    400: #dedede,
+    500: #c2c2c2,
+    600: #979797,
+    700: #818181,
+    800: #606060,
+    900: #ffffff,
+  ),
+);
+
+$kids-typography: mat.define-typography-config(
+  $font-family: "Roboto",
+);
+
+$my-primary: mat.define-palette($primary-palette, 900);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$my-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+    ),
+    typography: $kids-typography,
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($my-theme);

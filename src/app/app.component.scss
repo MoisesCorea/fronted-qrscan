@@ -10,14 +10,45 @@ h2 {
   padding: 1rem;
 }
 
+.img-responsive {
+  max-width: 35%;
+  height: auto;
+  @media screen and (min-width: 600px) {
+    max-width: 15%;
+  }
+}
+
+.fixed-button {
+  position: fixed;
+  top: 70px;
+  left: 75px;
+  z-index: 1050;
+  transition: right 0.3s ease;
+}
+
+.fixed-button.active {
+  left: 250px;
+}
+
+.fixed-button.mobile {
+  top: 50px;
+  left: 0px;
+}
+
 mat-toolbar {
   position: fixed;
   top: 0;
   z-index: 2;
+  background-color: #1e3148;
+  color: white;
 }
 
 mat-sidenav-container {
   height: 100%;
+}
+
+.expanded {
+  width: 250px;
 }
 
 /* spinner*/
@@ -48,12 +79,15 @@ mat-sidenav-container {
 //responsive
 
 mat-sidenav {
+  background-color: #1e3148;
+
   padding-top: 3.5rem;
   @media screen and (min-width: 600px) {
     padding-top: 4rem;
   }
 
   .entry {
+    color: white;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -61,7 +95,6 @@ mat-sidenav {
   }
 }
 
-// Move the content down so that it won't be hidden by the toolbar
 mat-sidenav-content {
   padding-top: 3.5rem;
   @media screen and (min-width: 600px) {

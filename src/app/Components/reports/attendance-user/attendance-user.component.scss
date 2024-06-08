@@ -1,17 +1,13 @@
 ul {
   list-style: none;
-  margin: 0;
   padding: 0;
-  position: absolute;
-  width: 15%;
-  border: 1px solid #ddd;
-  max-height: 150px;
+  margin: 0;
+  max-height: 200px; /* Ajusta la altura máxima si es necesario */
   overflow-y: auto;
-  background-color: white;
-
-  @media screen and (max-width: 760px) {
-    width: 95%;
-  }
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 li {

@@ -1,8 +1,7 @@
-/* Estilos de impresión */
 @media print {
   .card {
     page-break-inside: avoid;
-    margin-bottom: 200px;
+    page-break-after: always;
   }
 
   .row {

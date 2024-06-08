@@ -1,12 +1,13 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
-    <mat-icon
-      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
-      >menu</mat-icon
-    >
-  </button>
+<mat-toolbar>
+  <img
+    [routerLink]="['/home']"
+    class="img-responsive"
+    src="./assets/images/Qrscan.svg"
+    alt="Logo"
+  />
 
   <span class="example-spacer"></span>
+  <i class="fa-solid fa-circle-user"></i>
   <button mat-button [matMenuTriggerFor]="menu">
     {{
       (headerMenusService.headerManagement | async)?.showNoAuthSection
@@ -38,6 +39,7 @@
     </a>
   </mat-menu>
 </mat-toolbar>
+
 <div
   class="spinner-background loading"
   *ngIf="loaderService.isLoading$ | async"
@@ -47,7 +49,7 @@
 <mat-sidenav-container autosize>
   <mat-sidenav
     *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
-    [ngClass]="!isCollapsed ? 'expanded' : ''"
+    [ngClass]="isCollapsed ? 'expanded' : ''"
     [mode]="isMobile ? 'over' : 'side'"
     [opened]="isMobile ? 'false' : 'true'"
   >
@@ -67,7 +69,7 @@
         >
           <span class="entry">
             <i class="fa-solid fa-gauge"></i>
-            <span>Dashboard</span>
+            <span *ngIf="isCollapsed">Dashboard</span>
           </span>
         </a>
         <a
@@ -77,7 +79,7 @@
         >
           <span class="entry">
             <i class="fa-solid fa-user"></i>
-            <span>Usuarios</span>
+            <span *ngIf="isCollapsed">Usuarios</span>
           </span>
         </a>
         <a
@@ -87,7 +89,7 @@
         >
           <span class="entry">
             <i class="fa-solid fa-building-user"></i>
-            <span>Departamentos</span>
+            <span *ngIf="isCollapsed">Departamentos</span>
           </span>
         </a>
         <a
@@ -97,23 +99,23 @@
         >
           <span class="entry">
             <i class="fa-regular fa-calendar"></i>
-            <span>Eventos</span>
+            <span *ngIf="isCollapsed">Eventos</span>
           </span>
         </a>
         <a *ngIf="userRolIn(['Admin-1', 'Admin']) === true" mat-list-item>
           <span class="entry" [routerLink]="['/horarios']">
             <i class="fa-solid fa-clock"></i>
-            <span>Horarios</span>
+            <span *ngIf="isCollapsed">Horarios</span>
           </span>
         </a>
         <a
-          *ngIf="userRolIn(['Admin']) === true"
+          *ngIf="userRolIn(['Prueba']) === true"
           mat-list-item
           [routerLink]="['/roles']"
         >
           <span class="entry">
             <i class="fa-solid fa-users-rectangle"></i>
-            <span>Roles</span>
+            <span *ngIf="isCollapsed">Roles</span>
           </span>
         </a>
         <a
@@ -123,7 +125,7 @@
         >
           <span class="entry">
             <i class="fa-brands fa-black-tie"></i>
-            <span>Administradores</span>
+            <span *ngIf="isCollapsed">Administradores</span>
           </span>
         </a>
         <a
@@ -133,7 +135,7 @@
         >
           <span class="entry">
             <i class="fa-solid fa-file-circle-check"></i>
-            <span>Reportes</span>
+            <span *ngIf="isCollapsed">Reportes</span>
           </span>
         </a>
         <mat-menu #menu="matMenu">
@@ -163,6 +165,15 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
+    <button
+      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+      class="btn btn-primary rounded-circle mt-3 mx-3 fixed-button"
+      [class.active]="isCollapsed"
+      [class.mobile]="isMobile"
+      (click)="toggleMenu()"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

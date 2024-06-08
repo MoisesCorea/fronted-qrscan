@@ -32,11 +32,9 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loaderService.show();
     setInterval(() => {
       this.currentDate = new Date();
     }, 1000);
-    this.loaderService.hide();
   }
 
   handleQrCodeResult(result: any) {

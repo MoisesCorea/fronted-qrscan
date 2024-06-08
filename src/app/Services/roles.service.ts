@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { RolesDTO } from '../Models/roles.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 
 export interface deleteResponse {
   affected: number;
@@ -18,7 +19,7 @@ export class RolesService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'roles';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   getRoles(): Observable<RolesDTO[]> {
@@ -33,37 +34,20 @@ export class RolesService {
       .pipe(catchError(this.sharedService.handleError));
   }
   createRol(rol: RolesDTO): Observable<RolesDTO> {
-    return this.http.post<RolesDTO>(this.urlQrScanApi, rol).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Registro completado:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .post<RolesDTO>(this.urlQrScanApi, rol)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   updateRol(rolId: string, rol: RolesDTO): Observable<RolesDTO> {
-    return this.http.put<RolesDTO>(this.urlQrScanApi + '/' + rolId, rol).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Registro completado:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .put<RolesDTO>(this.urlQrScanApi + '/' + rolId, rol)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   deleteRol(rolId: number): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + rolId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 }

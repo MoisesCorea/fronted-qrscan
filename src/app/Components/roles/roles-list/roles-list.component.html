@@ -1,62 +1,61 @@
 <app-alert></app-alert>
-<div class="row mt-5 justify-content-center">
-  <div class="col-md-10">
-    <div class="table-responsive mx-3">
-      <h2 class="text-center">Lista de roles de usuarios</h2>
-      <button class="btn btn-primary addBtn mt-6" (click)="createRol()">
-        AGREGAR <i class="fa-solid fa-plus"></i>
-      </button>
+<div class="container-main">
+  <div class="row mt-5 justify-content-center">
+    <div class="col">
+      <div class="table-responsive mx-3">
+        <h2 class="text-center">Lista de roles de usuarios</h2>
+        <button class="btn btn-primary addBtn mt-6" (click)="createRol()">
+          AGREGAR <i class="fa-solid fa-plus"></i>
+        </button>
 
-      <div class="form-group mt-5 col-md">
-        <input
-          type="text"
-          class="forms-control"
-          placeholder="Buscar.."
-          [(ngModel)]="filterInput"
-          name="filterpost"
-          class="forms-control"
-          placeholder="Buscar.."
-        />
+        <div class="form-group mt-5 col-md">
+          <input
+            type="text"
+            class="forms-control"
+            placeholder="Buscar.."
+            [(ngModel)]="filterInput"
+          />
+        </div>
+
+        <table class="table table-bordered table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>NOMBRE</th>
+              <th>DESCRIPTION</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let rol of roles
+                  | filter : filterInput
+                  | paginate : { itemsPerPage: 5, currentPage: page }
+              "
+            >
+              <td>{{ rol.id }}</td>
+              <td>{{ rol.name }}</td>
+              <td>{{ rol.description }}</td>
+
+              <td>
+                <button class="btn btn-success" (click)="updateRol(rol.id)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-danger" (click)="deleteRol(rol.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <table class="table">
-        <thead class="table-light">
-          <tr>
-            <th>ID</th>
-            <th>NOMBRE</th>
-            <th>DESCRIPTION</th>
-            <th>ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="
-              let rol of roles
-                | filter : filterInput
-                | paginate : { itemsPerPage: 5, currentPage: page }
-            "
-          >
-            <td>{{ rol.id }}</td>
-            <td>{{ rol.name }}</td>
-            <td>{{ rol.description }}</td>
-
-            <td>
-              <button class="btn btn-success" (click)="updateRol(rol.id)">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button class="btn btn-danger" (click)="deleteRol(rol.id)">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <pagination-controls
+        class="text-center mb-5 mt-5"
+        (pageChange)="page = $event"
+        previousLabel="Aterior"
+        nextLabel="Siguiente"
+      ></pagination-controls>
     </div>
-    <pagination-controls
-      class="text-center mb-5 mt-5"
-      (pageChange)="page = $event"
-      previousLabel="Aterior"
-      nextLabel="Siguiente"
-    ></pagination-controls>
   </div>
 </div>

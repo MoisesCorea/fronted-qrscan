@@ -1,56 +1,54 @@
 <app-alert></app-alert>
-<div style="margin-left: auto; margin-right: auto">
-  <p id="registerFeedback"></p>
-</div>
-
-<div class="row justify-content-center">
-  <div class="col-6">
-    <h1 class="text-center">Registro de Departamentos</h1>
-    <form
-      [formGroup]="departmentForm"
-      (ngSubmit)="saveDepartment()"
-      class="form"
-    >
-      <div class="mb-2">
-        <label class="form-label" for="name">Nombre: </label>
-        <input class="form-control" type="text" [formControl]="name" />
-        <div
-          *ngIf="name.errors && isValidForm != null && !isValidForm"
-          [ngClass]="'error'"
-        >
-          <div *ngIf="name.errors.required">El nombre es requerido</div>
-          <div *ngIf="name.errors.minlength">
-            El nombre debe tener el menos 5 caracteres
-          </div>
-          <div *ngIf="name.errors.maxlength">
-            El nombre debe tener una longitud máxima de 255 caracteres
+<div class="container-main">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-5">Registro de Departamentos / Entidades</h2>
+      <form
+        [formGroup]="departmentForm"
+        (ngSubmit)="saveDepartment()"
+        class="form"
+      >
+        <div class="mb-2">
+          <label class="form-label" for="name">Nombre: </label>
+          <input class="form-control" type="text" [formControl]="name" />
+          <div
+            *ngIf="name.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="name.errors.required">El nombre es requerido</div>
+            <div *ngIf="name.errors.minlength">
+              El nombre debe tener el menos 5 caracteres
+            </div>
+            <div *ngIf="name.errors.maxlength">
+              El nombre debe tener una longitud máxima de 255 caracteres
+            </div>
           </div>
         </div>
-      </div>
-      <div class="mb-2">
-        <label class="form-label" for="lastName">Descripción: </label>
-        <textarea
-          class="form-control"
-          type="text"
-          [formControl]="description"
-        ></textarea>
-        <div
-          *ngIf="description.errors && isValidForm != null && !isValidForm"
-          [ngClass]="'error'"
-        >
-          <div *ngIf="description.errors.required">
-            La descripción es requeridoa
-          </div>
-          <div *ngIf="description.errors.minlength">
-            La descripción debe tener el menos 5 caracteres
-          </div>
-          <div *ngIf="description.errors.maxlength">
-            La descripción debe tener una longitud máxima de 255 caracteres
+        <div class="mb-2">
+          <label class="form-label" for="lastName">Descripción: </label>
+          <textarea
+            class="form-control"
+            type="text"
+            [formControl]="description"
+          ></textarea>
+          <div
+            *ngIf="description.errors && isValidForm != null && !isValidForm"
+            [ngClass]="'error'"
+          >
+            <div *ngIf="description.errors.required">
+              La descripción es requeridoa
+            </div>
+            <div *ngIf="description.errors.minlength">
+              La descripción debe tener el menos 5 caracteres
+            </div>
+            <div *ngIf="description.errors.maxlength">
+              La descripción debe tener una longitud máxima de 255 caracteres
+            </div>
           </div>
         </div>
-      </div>
 
-      <button class="btn btn-primary mt-4" type="submit">Guardar</button>
-    </form>
+        <button class="btn btn-primary mt-4" type="submit">Guardar</button>
+      </form>
+    </div>
   </div>
 </div>

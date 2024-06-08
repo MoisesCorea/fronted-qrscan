@@ -1,209 +1,228 @@
 <app-alert></app-alert>
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <h1 class="text-center">Registro de Usuarios</h1>
-    <form class="form mx-3" [formGroup]="userForm" (ngSubmit)="saveUser()">
-      <div class="row mb-2">
-        <div class="col-md">
-          <label class="form-label" for="name">Nombres: </label>
-          <input class="form-control" type="text" formControlName="name" />
-          <div
-            *ngIf="name.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="name.errors.required">El nombre es requerido</div>
-            <div *ngIf="name.errors.minlength">
-              El nombre debe tener al menos 5 caracteres
+<div class="container-main mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="text-center mb-5">Registro de Usuarios</h2>
+      <form class="form mx-3" [formGroup]="userForm" (ngSubmit)="saveUser()">
+        <div class="row mb-2">
+          <div class="col-md">
+            <label class="form-label" for="name">Nombres: </label>
+            <input class="form-control" type="text" formControlName="name" />
+            <div
+              *ngIf="name.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="name.errors.required">El nombre es requerido</div>
+              <div *ngIf="name.errors.minlength">
+                El nombre debe tener al menos 5 caracteres
+              </div>
+              <div *ngIf="name.errors.maxlength">
+                El nombre debe tener como máximo 255 caracteres
+              </div>
             </div>
-            <div *ngIf="name.errors.maxlength">
-              El nombre debe tener como máximo 255 caracteres
+          </div>
+          <div class="col-md">
+            <label class="form-label" for="last_name">Apellidos: </label>
+            <input
+              class="form-control"
+              type="text"
+              formControlName="last_name"
+            />
+            <div
+              *ngIf="last_name.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="last_name.errors.required">
+                El apellido es requerido
+              </div>
+              <div *ngIf="last_name.errors.minlength">
+                El apellido debe tener al menos 5 caracteres
+              </div>
+              <div *ngIf="last_name.errors.maxlength">
+                El apellido debe tener como máximo 255 caracteres
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md">
-          <label class="form-label" for="last_name">Apellidos: </label>
-          <input class="form-control" type="text" formControlName="last_name" />
-          <div
-            *ngIf="last_name.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="last_name.errors.required">
-              El apellido es requerido
-            </div>
-            <div *ngIf="last_name.errors.minlength">
-              El apellido debe tener al menos 5 caracteres
-            </div>
-            <div *ngIf="last_name.errors.maxlength">
-              El apellido debe tener como máximo 255 caracteres
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="row mb-2">
-        <div class="col-md">
-          <label class="form-label" for="age">Edad: </label>
-          <input class="form-control" type="number" formControlName="age" />
-          <div
-            *ngIf="age.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="age.errors.required">La edad es requerida</div>
+        <div class="row mb-2">
+          <div class="col-md">
+            <label class="form-label" for="age">Edad: </label>
+            <input class="form-control" type="number" formControlName="age" />
+            <div
+              *ngIf="age.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="age.errors.required">La edad es requerida</div>
+            </div>
+          </div>
+          <div class="col-md">
+            <label class="form-label" for="gender"> Sexo:</label>
+            <select class="form-control" formControlName="gender" required>
+              <option [ngValue]="null" selected>-- Seleccionar --</option>
+              <option
+                *ngFor="let gender of genderOptions"
+                [ngValue]="gender.value"
+              >
+                {{ gender.value }}
+              </option>
+            </select>
+            <div
+              *ngIf="gender.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="gender.errors.required">Selecciona un sexo</div>
+            </div>
           </div>
         </div>
-        <div class="col-md">
-          <label class="form-label" for="gender"> Sexo:</label>
-          <select class="form-control" formControlName="gender" required>
+        <div class="row mb-2">
+          <div class="col-md">
+            <label class="form-label" for="email">Correo electrónico: </label>
+            <input class="form-control" type="email" formControlName="email" />
+            <div
+              *ngIf="email.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="email.errors.required">
+                El correo electrónico es requerido
+              </div>
+              <div *ngIf="email.errors.maxlength">
+                El correo electrónico debe tener como máximo 255 caracteres
+              </div>
+              <div *ngIf="email.errors.pattern">
+                El correo electrónico no tiene un formato válido.
+              </div>
+            </div>
+          </div>
+          <div class="col-md">
+            <label class="form-label" for="address">Dirección: </label>
+            <input class="form-control" type="text" formControlName="address" />
+            <div
+              *ngIf="address.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="address.errors.required">
+                La dirección es requerida
+              </div>
+              <div *ngIf="address.errors.minlength">
+                La dirección debe tener al menos 5 caracteres
+              </div>
+              <div *ngIf="address.errors.maxlength">
+                La dirección debe tener como máximo 255 caracteres
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-md">
+            <label class="form-label" for="phone_number">Télefono: </label>
+            <input
+              class="form-control"
+              type="number"
+              appPhoneFormat
+              formControlName="phone_number"
+            />
+            <div
+              *ngIf="phone_number.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="phone_number.errors.required">
+                El teléfono es requerido
+              </div>
+              <div *ngIf="phone_number.errors.minlength">
+                El teléfono debe tener al menos 8 digitos
+              </div>
+              <div *ngIf="phone_number.errors.max">
+                El teléfono debe tener como máximo 15 digitos
+              </div>
+            </div>
+          </div>
+          <div class="col-md">
+            <label class="form-label" for="profile_image"
+              >Imagen de perfil:
+            </label>
+            <input
+              class="form-control"
+              type="file"
+              formControlName="profile_image"
+              (change)="onFileChange($event)"
+            />
+            <div
+              *ngIf="
+                profile_image.errors && isValidForm != null && !isValidForm
+              "
+              [ngClass]="'error'"
+            >
+              La imagen de perfil es requerida
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col-md">
+            <label class="form-label" for="shift_id">Horario:</label>
+            <select class="form-control" formControlName="shift_id" required>
+              <option [ngValue]="null" selected>-- Seleccionar --</option>
+              <option *ngFor="let shift of shiftsList" [ngValue]="shift.id">
+                {{ shift.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="shift_id.errors && isValidForm != null && !isValidForm"
+              [ngClass]="'error'"
+            >
+              <div *ngIf="shift_id.errors.required">Selecciona un horario</div>
+            </div>
+          </div>
+          <div class="col-md">
+            <label class="form-label" for="department_id">Departamento:</label>
+            <select
+              class="form-control"
+              formControlName="department_id"
+              required
+            >
+              <option [ngValue]="null" selected>-- Seleccionar --</option>
+              <option
+                *ngFor="let department of departmentsList"
+                [ngValue]="department.id"
+              >
+                {{ department.name }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                department_id.errors && isValidForm != null && !isValidForm
+              "
+              [ngClass]="'error'"
+            >
+              <div *ngIf="department_id.errors.required">
+                Selecciona un departamento
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label" for="status">Estado:</label>
+          <select class="form-control" formControlName="status" required>
             <option [ngValue]="null" selected>-- Seleccionar --</option>
             <option
-              *ngFor="let gender of genderOptions"
-              [ngValue]="gender.value"
+              *ngFor="let status of statusOptions"
+              [ngValue]="status.value"
             >
-              {{ gender.value }}
+              {{ status.label }}
             </option>
           </select>
           <div
-            *ngIf="gender.errors && isValidForm != null && !isValidForm"
+            *ngIf="status.errors && isValidForm != null && !isValidForm"
             [ngClass]="'error'"
           >
-            <div *ngIf="gender.errors.required">Selecciona un sexo</div>
+            <div *ngIf="status.errors.required">Selecciona un estado</div>
           </div>
         </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md">
-          <label class="form-label" for="email">Correo electrónico: </label>
-          <input class="form-control" type="email" formControlName="email" />
-          <div
-            *ngIf="email.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="email.errors.required">
-              El correo electrónico es requerido
-            </div>
-            <div *ngIf="email.errors.maxlength">
-              El correo electrónico debe tener como máximo 255 caracteres
-            </div>
-            <div *ngIf="email.errors.pattern">
-              El correo electrónico no tiene un formato válido.
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <label class="form-label" for="address">Dirección: </label>
-          <input class="form-control" type="text" formControlName="address" />
-          <div
-            *ngIf="address.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="address.errors.required">La dirección es requerida</div>
-            <div *ngIf="address.errors.minlength">
-              La dirección debe tener al menos 5 caracteres
-            </div>
-            <div *ngIf="address.errors.maxlength">
-              La dirección debe tener como máximo 255 caracteres
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col-md">
-          <label class="form-label" for="phone_number">Télefono: </label>
-          <input
-            class="form-control"
-            type="number"
-            appPhoneFormat
-            formControlName="phone_number"
-          />
-          <div
-            *ngIf="phone_number.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="phone_number.errors.required">
-              El teléfono es requerido
-            </div>
-            <div *ngIf="phone_number.errors.minlength">
-              El teléfono debe tener al menos 8 digitos
-            </div>
-            <div *ngIf="phone_number.errors.max">
-              El teléfono debe tener como máximo 15 digitos
-            </div>
-          </div>
-        </div>
-        <div class="col-md">
-          <label class="form-label" for="profile_image"
-            >Imagen de perfil:
-          </label>
-          <input
-            class="form-control"
-            type="file"
-            formControlName="profile_image"
-            (change)="onFileChange($event)"
-          />
-          <div
-            *ngIf="profile_image.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            La imagen de perfil es requerida
-          </div>
-        </div>
-      </div>
 
-      <div class="row mb-2">
-        <div class="col-md">
-          <label class="form-label" for="shift_id">Horario:</label>
-          <select class="form-control" formControlName="shift_id" required>
-            <option [ngValue]="null" selected>-- Seleccionar --</option>
-            <option *ngFor="let shift of shiftsList" [ngValue]="shift.id">
-              {{ shift.name }}
-            </option>
-          </select>
-          <div
-            *ngIf="shift_id.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="shift_id.errors.required">Selecciona un horario</div>
-          </div>
-        </div>
-        <div class="col-md">
-          <label class="form-label" for="department_id">Departamento:</label>
-          <select class="form-control" formControlName="department_id" required>
-            <option [ngValue]="null" selected>-- Seleccionar --</option>
-            <option
-              *ngFor="let department of departmentsList"
-              [ngValue]="department.id"
-            >
-              {{ department.name }}
-            </option>
-          </select>
-          <div
-            *ngIf="department_id.errors && isValidForm != null && !isValidForm"
-            [ngClass]="'error'"
-          >
-            <div *ngIf="department_id.errors.required">
-              Selecciona un departamento
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-2">
-        <label class="form-label" for="status">Estado:</label>
-        <select class="form-control" formControlName="status" required>
-          <option [ngValue]="null" selected>-- Seleccionar --</option>
-          <option *ngFor="let status of statusOptions" [ngValue]="status.value">
-            {{ status.label }}
-          </option>
-        </select>
-        <div
-          *ngIf="status.errors && isValidForm != null && !isValidForm"
-          [ngClass]="'error'"
-        >
-          <div *ngIf="status.errors.required">Selecciona un estado</div>
-        </div>
-      </div>
-
-      <button class="btn btn-primary mt-4" type="submit">Guardar</button>
-    </form>
+        <button class="btn btn-primary mt-4" type="submit">Guardar</button>
+      </form>
+    </div>
   </div>
 </div>

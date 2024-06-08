@@ -70,7 +70,7 @@ export class AppComponent {
       const admins$ = this.adminService.getAdminById(adminId).pipe(
         tap(() => console.log('Obteniendo nombre del rol')),
         map((admin: AdminDTO) => {
-          return admin.name + ' ' + admin.last_name;
+          return admin.alias;
         }),
         catchError((error) => {
           console.error('Error obteniendo el nombre del rol:', error);

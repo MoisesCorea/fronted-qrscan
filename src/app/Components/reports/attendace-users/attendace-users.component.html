@@ -138,22 +138,24 @@
           <table class="table table-bordered table-striped">
             <thead class="thead-light">
               <tr>
-                <th>Fecha</th>
-                <th>Hora de Entrada</th>
-                <th>Hora de Salida</th>
-                <th *ngIf="user.daily_attendance === 'Si'">Minutos Tarde</th>
+                <th>FECHA</th>
+                <th>ENTRADA</th>
+                <th>SALIDA</th>
                 <th *ngIf="user.daily_attendance === 'Si'">
-                  Minutos de Salida Temprana
+                  MINUTOS ENTRADA (DESPUES)
                 </th>
                 <th *ngIf="user.daily_attendance === 'Si'">
-                  Tiempo no dedicado (minutos)
+                  MINUTOS SALIDA (ANTES)
                 </th>
-                <th>Tiempo dedicado (horas)</th>
+                <th *ngIf="user.daily_attendance === 'Si'">
+                  TIEMPO NO DEDICADO
+                </th>
+                <th>TIEMPO DEDICADO</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let attendances of user.attendances">
-                <td>{{ user.attendance_date | formatDate : 3 }}</td>
+                <td>{{ attendances.attendance_date }}</td>
                 <td>{{ attendances.entry_time }}</td>
                 <td>{{ attendances.finish_time }}</td>
                 <td *ngIf="user.daily_attendance === 'Si'">
@@ -163,9 +165,9 @@
                   {{ attendances.minutes_early_leaving }}
                 </td>
                 <td *ngIf="user.daily_attendance === 'Si'">
-                  {{ attendances.time_non_dedicated }}
+                  {{ attendances.time_non_dedicated }} Minutos
                 </td>
-                <td>{{ attendances.time_dedicated }}</td>
+                <td>{{ attendances.time_dedicated }} Horas</td>
               </tr>
             </tbody>
           </table>
@@ -176,10 +178,10 @@
         <table class="table table-bordered table-striped">
           <thead class="thead-light">
             <tr>
-              <th>Nombre</th>
-              <th>Departamento</th>
+              <th>NOMBRE</th>
+              <th>DEPARTAMENTO / ENTIDAD</th>
               <th>Evento</th>
-              <th>Tiempo dedicado (horas)</th>
+              <th>TIEMPO DEDICADO</th>
             </tr>
           </thead>
           <tbody>
@@ -192,7 +194,7 @@
               <td>{{ user.user_name }}</td>
               <td>{{ user.department_name }}</td>
               <td>{{ user.event_name }}</td>
-              <td>{{ user.total_dedicated_hours.toFixed(0) }}</td>
+              <td>{{ user.total_dedicated_hours.toFixed(0) }} Horas</td>
             </tr>
           </tbody>
         </table>

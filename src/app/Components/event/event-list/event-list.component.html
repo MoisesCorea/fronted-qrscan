@@ -1,82 +1,81 @@
 <app-alert></app-alert>
-<div class="row mt-5 justify-content-center">
-  <div class="col-md-10">
-    <div class="table-responsive mx-3">
-      <h2 class="text-center">Lista de eventos</h2>
-      <button class="btn btn-primary addBtn" (click)="createEvent()">
-        AGREGAR <i class="fa-solid fa-plus"></i>
-      </button>
+<div class="container-main">
+  <div class="row mt-5 justify-content-center">
+    <div class="col">
+      <div class="table-responsive mx-3">
+        <h2 class="text-center">Lista de eventos</h2>
+        <button class="btn btn-primary addBtn" (click)="createEvent()">
+          AGREGAR <i class="fa-solid fa-plus"></i>
+        </button>
 
-      <div class="form-group mt-5 col-md">
-        <input
-          type="text"
-          class="forms-control"
-          placeholder="Buscar.."
-          [(ngModel)]="filterInput"
-          name="filterpost"
-          class="forms-control"
-          placeholder="Buscar.."
-        />
+        <div class="form-group mt-5 col-md">
+          <input
+            type="text"
+            class="forms-control"
+            placeholder="Buscar.."
+            [(ngModel)]="filterInput"
+          />
+        </div>
+
+        <table class="table table-bordered table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>NOMBRE</th>
+              <th class="text-center">ESTADO</th>
+              <th class="text-center">ASISTENCIA DIARIA</th>
+              <th>CAMBIO DE REGISTRO</th>
+              <th>DESCRIPCIÓN</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let evnt of events
+                  | filter : filterInput
+                  | paginate : { itemsPerPage: 5, currentPage: page }
+              "
+            >
+              <td>{{ evnt.id }}</td>
+              <td>{{ evnt.name }}</td>
+              <td class="text-center">
+                <input
+                  class="form-check-input align-self-center"
+                  type="checkbox"
+                  [checked]="evnt.status === 1"
+                  (change)="updateStatus(evnt.id, $event)"
+                />
+              </td>
+              <td class="text-center">
+                <input
+                  class="form-check-input align-self-center"
+                  type="checkbox"
+                  [checked]="evnt.daily_attendance === 1"
+                  (change)="updateDailyAttendance(evnt.id, $event)"
+                />
+              </td>
+              <td>{{ evnt.change_attendance }} Minutos</td>
+              <td>{{ evnt.description }}</td>
+
+              <td>
+                <button class="btn btn-success" (click)="updateEvent(evnt.id)">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button class="btn btn-danger" (click)="deleteEvent(evnt.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <table class="table">
-        <thead class="table-light">
-          <tr>
-            <th>ID</th>
-            <th>NOMBRE</th>
-            <th>ESTADO</th>
-            <th>ASISTENCIA DIARIA</th>
-            <th>CAMBIO DE REGISTRO (MINUTOS)</th>
-            <th>DESCRIPCIÓN</th>
-            <th>ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="
-              let evnt of events
-                | filter : filterInput
-                | paginate : { itemsPerPage: 5, currentPage: page }
-            "
-          >
-            <td>{{ evnt.id }}</td>
-            <td>{{ evnt.name }}</td>
-            <td>
-              <input
-                class="form-check-input align-self-center"
-                type="checkbox"
-                [checked]="evnt.status === 1"
-                (change)="updateStatus(evnt.id, $event)"
-              />
-            </td>
-            <td>
-              <input
-                class="form-check-input align-self-center"
-                type="checkbox"
-                [checked]="evnt.daily_attendance === 1"
-                (change)="updateDailyAttendance(evnt.id, $event)"
-              />
-            </td>
-            <td>{{ evnt.change_attendance }}</td>
-            <td>{{ evnt.description }}</td>
-
-            <td>
-              <button class="btn btn-success" (click)="updateEvent(evnt.id)">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button class="btn btn-danger" (click)="deleteEvent(evnt.id)">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <pagination-controls
+        class="text-center mb-5 mt-5"
+        (pageChange)="page = $event"
+        previousLabel="Aterior"
+        nextLabel="Siguiente"
+      ></pagination-controls>
     </div>
-    <pagination-controls
-      class="text-center mb-5 mt-5"
-      (pageChange)="page = $event"
-      previousLabel="Aterior"
-      nextLabel="Siguiente"
-    ></pagination-controls>
   </div>
 </div>

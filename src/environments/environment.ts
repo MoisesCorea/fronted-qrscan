@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'https://qrsacan-uoc-d7650263c90c.herokuapp.com/public/api/',
+  apiUrlShort: 'https://qrsacan-uoc-d7650263c90c.herokuapp.com/public/',
 };
 
 /*

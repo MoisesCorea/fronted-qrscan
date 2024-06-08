@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { DepartmentDTO } from '../Models/department.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 
 export interface deleteResponse {
   affected: number;
@@ -18,7 +19,7 @@ export class DepartmentService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'departmentos';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   getDepartments(): Observable<DepartmentDTO[]> {
@@ -30,24 +31,12 @@ export class DepartmentService {
   getDepartmentById(departmentId: number): Observable<DepartmentDTO> {
     return this.http
       .get<DepartmentDTO>(this.urlQrScanApi + '/' + departmentId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
   createDepartment(rol: DepartmentDTO): Observable<DepartmentDTO> {
-    return this.http.post<DepartmentDTO>(this.urlQrScanApi, rol).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Registro completado:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .post<DepartmentDTO>(this.urlQrScanApi, rol)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   updateDepartment(
@@ -56,26 +45,12 @@ export class DepartmentService {
   ): Observable<DepartmentDTO> {
     return this.http
       .put<DepartmentDTO>(this.urlQrScanApi + '/' + departmentId, rol)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   deleteDepartment(departmentId: number): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + departmentId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 }

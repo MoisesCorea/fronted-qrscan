@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AdminDTO } from '../Models/admin.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 
 export interface deleteResponse {
   affected: number;
@@ -18,42 +19,25 @@ export class AdminService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'admins';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   register(admin: AdminDTO): Observable<AdminDTO> {
-    return this.http.post<AdminDTO>(this.urlQrScanApi, admin).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Registro completado:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .post<AdminDTO>(this.urlQrScanApi, admin)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   updateAdmin(adminId: string, admin: AdminDTO): Observable<AdminDTO> {
     return this.http
       .patch<AdminDTO>(this.urlQrScanApi + '/' + adminId, admin)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Admin actualizado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   getAdminById(adminId: string): Observable<AdminDTO> {
-    return this.http.get<AdminDTO>(this.urlQrScanApi + '/' + adminId).pipe(
-      catchError(this.sharedService.handleError),
-      tap((result) => {
-        // Esto se ejecutará cada vez que se complete con éxito el registro
-        console.log('Registro completado:', result);
-        // Puedes agregar más lógica aquí según tus necesidades
-      })
-    );
+    return this.http
+      .get<AdminDTO>(this.urlQrScanApi + '/' + adminId)
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   getAdmins(): Observable<AdminDTO[]> {
@@ -65,26 +49,12 @@ export class AdminService {
   deleteAdmin(adminId: number): Observable<deleteResponse> {
     return this.http
       .delete<deleteResponse>(this.urlQrScanApi + '/' + adminId)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   changePassword(password: any): Observable<any> {
     return this.http
-      .post<AdminDTO>('http://localhost:8000/api/change-password', password)
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          // Esto se ejecutará cada vez que se complete con éxito el registro
-          console.log('Registro completado:', result);
-          // Puedes agregar más lógica aquí según tus necesidades
-        })
-      );
+      .post<AdminDTO>('change-password', password)
+      .pipe(catchError(this.sharedService.handleError));
   }
 }

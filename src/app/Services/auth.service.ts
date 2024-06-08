@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthDTO } from '../Models/auth.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 
 export interface AuthToken {
   user_id: number;
@@ -18,7 +19,7 @@ export class AuthService {
   private urlQrScanApi: string;
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
-    this.urlQrScanApi = 'http://localhost:8000/api/';
+    this.urlQrScanApi = environment.apiUrl;
   }
 
   login(auth: AuthDTO): Observable<AuthToken> {

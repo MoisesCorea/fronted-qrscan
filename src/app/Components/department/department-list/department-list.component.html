@@ -1,63 +1,68 @@
 <app-alert></app-alert>
-<div class="row mt-5 justify-content-center">
-  <div class="col-md-10">
-    <div class="table-responsive mx-3">
-      <h2 class="text-center">Lista de instancias</h2>
-      <button class="btn btn-primary addBtn mt-6" (click)="createDepartment()">
-        AGREGAR <i class="fa-solid fa-plus"></i>
-      </button>
-      <div class="form-group mt-5">
-        <input
-          type="text"
-          class="forms-control"
-          placeholder="Buscar.."
-          [(ngModel)]="filterInput"
-        />
-      </div>
-      <table class="table">
-        <thead class="table-light">
-          <tr>
-            <th>ID</th>
-            <th>NOMBRE</th>
-            <th>DESCRIPCION</th>
-            <th>ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="
-              let department of departments
-                | filter : filterInput
-                | paginate : { itemsPerPage: 5, currentPage: page }
-            "
-          >
-            <td>{{ department.id }}</td>
-            <td>{{ department.name }}</td>
-            <td>{{ department.description }}</td>
+<div class="container-main">
+  <div class="row mt-5 justify-content-center">
+    <div class="col">
+      <div class="table-responsive mx-3">
+        <h2 class="text-center">Departementos / Entidades</h2>
+        <button
+          class="btn btn-primary addBtn mt-6"
+          (click)="createDepartment()"
+        >
+          AGREGAR <i class="fa-solid fa-plus"></i>
+        </button>
+        <div class="form-group mt-5">
+          <input
+            type="text"
+            class="forms-control"
+            placeholder="Buscar.."
+            [(ngModel)]="filterInput"
+          />
+        </div>
+        <table class="table table-bordered table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>NOMBRE</th>
+              <th>DESCRIPCION</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let department of departments
+                  | filter : filterInput
+                  | paginate : { itemsPerPage: 5, currentPage: page }
+              "
+            >
+              <td>{{ department.id }}</td>
+              <td>{{ department.name }}</td>
+              <td>{{ department.description }}</td>
 
-            <td>
-              <button
-                class="btn btn-success"
-                (click)="updateDepartment(department.id)"
-              >
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button
-                class="btn btn-danger"
-                (click)="deleteDepartment(department.id)"
-              >
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <td>
+                <button
+                  class="btn btn-success"
+                  (click)="updateDepartment(department.id)"
+                >
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button
+                  class="btn btn-danger"
+                  (click)="deleteDepartment(department.id)"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pagination-controls
+        class="text-center mb-5 mt-5"
+        (pageChange)="page = $event"
+        previousLabel="Aterior"
+        nextLabel="Siguiente"
+      ></pagination-controls>
     </div>
-    <pagination-controls
-      class="text-center mb-5 mt-5"
-      (pageChange)="page = $event"
-      previousLabel="Aterior"
-      nextLabel="Siguiente"
-    ></pagination-controls>
   </div>
 </div>

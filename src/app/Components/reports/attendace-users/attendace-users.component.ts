@@ -16,6 +16,7 @@ import { formatDate } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { LoaderService } from 'src/app/Services/loader.service';
+//import * as printJS from 'print-js';
 
 @Component({
   selector: 'app-attendace-users',
@@ -105,18 +106,15 @@ export class AttendaceUsersComponent {
   }
 
   private loadEvents(): void {
-    this.loaderService.show();
     let errorResponse: any;
 
     this.eventtService.getEvents().subscribe(
       (events: EventDTO[]) => {
         this.eventsList = events;
-        this.loaderService.hide();
       },
       (error: HttpErrorResponse) => {
         errorResponse = error.error;
         this.sharedService.errorLog(errorResponse);
-        this.loaderService.hide();
       }
     );
   }
@@ -134,6 +132,14 @@ export class AttendaceUsersComponent {
       }
     );
   }
+
+  /*printContent() {
+    printJS({
+      printable: 'printSection',
+      type: 'html',
+      targetStyles: ['*'],
+    });
+  }*/
 
   onSubmit() {
     this.isValidForm = false;

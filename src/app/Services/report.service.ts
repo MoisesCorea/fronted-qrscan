@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ReportDTO } from '../Models/report.dto';
 import { SharedService } from './shared.service';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +14,7 @@ export class ReportService {
 
   constructor(private http: HttpClient, private sharedService: SharedService) {
     this.controller = 'report';
-    this.urlQrScanApi = 'http://localhost:8000/api/' + this.controller;
+    this.urlQrScanApi = environment.apiUrl + this.controller;
   }
 
   attendanceReportUsaurio(report: ReportDTO): Observable<any> {
@@ -34,7 +35,7 @@ export class ReportService {
 
   getDailyAttendace(): Observable<any[]> {
     return this.http
-      .get<any[]>('http://localhost:8000/api/asistencia')
+      .get<any[]>(environment.apiUrl + 'asistencia')
       .pipe(catchError(this.sharedService.handleError));
   }
 }

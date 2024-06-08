@@ -10,6 +10,7 @@ import { ShiftService } from 'src/app/Services/shift.service';
 import { catchError, map, tap } from 'rxjs/operators';
 import { CardDTO } from 'src/app/Models/card.dto';
 import { LoaderService } from 'src/app/Services/loader.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-user-card',
@@ -21,6 +22,7 @@ export class UsersCardComponent {
   department?: DepartmentDTO;
   filterInput: string = ''; //PipeFilter
   page!: number; // pagination
+  QrScanApiUrl: string;
 
   private cachedDepartments: { [department_id: number]: Observable<string> } =
     {};
@@ -32,6 +34,7 @@ export class UsersCardComponent {
     private departmentService: DepartmentService,
     @Inject(LoaderService) private loaderService: LoaderService
   ) {
+    this.QrScanApiUrl = environment.apiUrlShort;
     this.loadUsers();
   }
 
