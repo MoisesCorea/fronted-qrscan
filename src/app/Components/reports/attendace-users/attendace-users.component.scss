@@ -1,6 +1,11 @@
 .element {
   margin-bottom: 5rem;
 }
+
+.paginador ::ng-deep .ngx-pagination .current {
+  background: #1e3148;
+}
+
 @media print {
   .element {
     page-break-inside: avoid;

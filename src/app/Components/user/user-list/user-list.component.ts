@@ -61,9 +61,7 @@ export class UserListComponent {
       const department$ = this.departmentService
         .getDepartmentById(department_id)
         .pipe(
-          tap(() => console.log('Obteniendo nombre del rol')),
           map((department: DepartmentDTO) => {
-            console.log('Rol obtenido:', department);
             return department.name;
           }),
           catchError((error) => {
@@ -82,9 +80,7 @@ export class UserListComponent {
       return this.cachedShifts[shift_id];
     } else {
       const shift$ = this.shiftService.getShiftById(shift_id).pipe(
-        tap(() => console.log('Obteniendo nombre del turno')),
         map((shift: ShiftDTO) => {
-          console.log('Rol obtenido:', shift);
           return shift.name;
         }),
         catchError((error) => {

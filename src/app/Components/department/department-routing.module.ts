@@ -4,9 +4,14 @@ import { DepartmentFormComponent } from './department-form/department-form.compo
 import { DepartmentListComponent } from './department-list/department-list.component';
 
 const routes: Routes = [
-  { path: '', component: DepartmentListComponent },
+  {
+    path: '',
+    component: DepartmentListComponent,
+    data: { breadcrumb: 'departamentos' },
+  },
   {
     path: 'item/:id',
+    data: { breadcrumb: 'formulario' },
     component: DepartmentFormComponent,
   },
 ];

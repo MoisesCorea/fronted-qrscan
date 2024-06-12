@@ -4,9 +4,10 @@ import { ShiftListComponent } from './shift-list/shift-list.component';
 import { ShiftFormComponent } from './shift-form/shift-form.component';
 
 const routes: Routes = [
-  { path: '', component: ShiftListComponent },
+  { path: '', data: { breadcrumb: 'horarios' }, component: ShiftListComponent },
   {
     path: 'item/:id',
+    data: { breadcrumb: 'formaulario' },
     component: ShiftFormComponent,
   },
 ];

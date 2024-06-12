@@ -1,8 +1,9 @@
 <app-alert></app-alert>
+<app-breadcrumbs></app-breadcrumbs>
 <div class="container-main">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h2 class="text-center mb-5">Registro de turnos</h2>
+      <h2 class="text-center mb-5">Registro de Horarios</h2>
       <form class="form mx-3" [formGroup]="shiftForm" (ngSubmit)="saveShift()">
         <div class="mb-2">
           <label class="form-label" for="name">Nombre: </label>
@@ -56,7 +57,7 @@
         </div>
         <div class="mb-2">
           <label class="form-label" for="shift_duration"
-            >Duración del turno:
+            >Duración del turno (horas):
           </label>
           <input
             class="form-control"
@@ -74,7 +75,7 @@
         </div>
         <div class="mb-2">
           <label class="form-label" for="mothly_late_allowance"
-            >Tiempo de prorroga:
+            >Limite mensual por minutos tarde (minutos):
           </label>
           <input
             class="form-control"

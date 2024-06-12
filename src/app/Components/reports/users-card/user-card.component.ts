@@ -22,7 +22,6 @@ export class UsersCardComponent {
   department?: DepartmentDTO;
   filterInput: string = ''; //PipeFilter
   page!: number; // pagination
-  QrScanApiUrl: string;
 
   private cachedDepartments: { [department_id: number]: Observable<string> } =
     {};
@@ -34,7 +33,6 @@ export class UsersCardComponent {
     private departmentService: DepartmentService,
     @Inject(LoaderService) private loaderService: LoaderService
   ) {
-    this.QrScanApiUrl = environment.apiUrlShort;
     this.loadUsers();
   }
 

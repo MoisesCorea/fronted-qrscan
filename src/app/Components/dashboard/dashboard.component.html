@@ -1,3 +1,4 @@
+<app-breadcrumbs></app-breadcrumbs>
 <div *ngIf="reportData" class="container-main mt-4">
   <h2 class="text-center mt-4">Asistencia Diaria</h2>
   <div class="form-group mt-5">
@@ -34,7 +35,7 @@
     </tbody>
   </table>
   <pagination-controls
-    class="text-center mb-5 mt-5"
+    class="paginador text-center mb-5 mt-5"
     (pageChange)="page = $event"
     previousLabel="Aterior"
     nextLabel="Siguiente"

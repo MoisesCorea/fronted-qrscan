@@ -1,5 +1,6 @@
 <app-alert></app-alert>
 <div class="container-main">
+  <h2 class="text-center mb-4">Reporte de Asistencia</h2>
   <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" class="mb-5 mt-5">
     <div class="row">
       <div class="form-group col-md-3">
@@ -71,7 +72,7 @@
           *ngIf="events.errors && isValidForm != null && !isValidForm"
           [ngClass]="'error'"
         >
-          <div *ngIf="events.errors.required">Selecciona un rol de usuario</div>
+          <div *ngIf="events.errors.required">Selecciona un evento</div>
         </div>
       </div>
       <div class="col-md-2">
@@ -94,7 +95,6 @@
       </div>
     </div>
     <div id="report">
-      <h2 class="text-center mb-4 mt-5">Reporte de Asistencia</h2>
       <div *ngIf="reportData[0].daily_attendance === 'Si'">
         <div
           class="element"
@@ -201,7 +201,7 @@
       </div>
     </div>
     <pagination-controls
-      class="text-center mb-5 mt-5"
+      class="paginador text-center mb-5 mt-5"
       (pageChange)="page = $event"
       previousLabel="Aterior"
       nextLabel="Siguiente"

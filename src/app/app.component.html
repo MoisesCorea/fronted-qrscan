@@ -5,6 +5,15 @@
     src="./assets/images/Qrscan.svg"
     alt="Logo"
   />
+  <button
+    *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
+    class="btn btn-primary rounded-circle mt-3 mx-3 fixed-button"
+    [class.active]="isCollapsed"
+    [class.mobile]="isMobile"
+    (click)="toggleMenu()"
+  >
+    <i class="fa-solid fa-bars"></i>
+  </button>
 
   <span class="example-spacer"></span>
   <i class="fa-solid fa-circle-user"></i>
@@ -165,15 +174,6 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <button
-      *ngIf="(headerMenusService.headerManagement | async)?.showAuthSection"
-      class="btn btn-primary rounded-circle mt-3 mx-3 fixed-button"
-      [class.active]="isCollapsed"
-      [class.mobile]="isMobile"
-      (click)="toggleMenu()"
-    >
-      <i class="fa-solid fa-bars"></i>
-    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

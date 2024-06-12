@@ -19,7 +19,6 @@ export class HeaderMenusService {
       showAuthSection: isAuthenticated,
       showNoAuthSection: !isAuthenticated,
     };
-    console.log(headerInfo);
     this.headerManagement.next(headerInfo);
   }
 }

@@ -1,22 +1,18 @@
 #apiAlert {
   position: fixed;
-  top: 64px;
-  left: 0;
+  top: 56px;
   width: 100%;
+  margin: 0 auto;
   display: none;
-  min-width: 250px;
   color: #fff;
-  justify-items: center;
   text-align: center;
   padding: 16px;
-  z-index: 1;
   font-size: 14px;
-  margin-top: 0px;
-  height: auto;
-  max-height: 120px;
-
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Añade una sombra para darle profundidad */
-  transition: visibility 0s, opacity 0.5s linear; /* Transición suave */
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: visibility 0s, opacity 0.5s linear;
+  max-height: 115px;
+  overflow: hidden;
 }
 
 #apiAlert.requestOk {

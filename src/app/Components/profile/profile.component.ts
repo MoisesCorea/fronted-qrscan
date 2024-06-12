@@ -99,8 +99,6 @@ export class ProfileComponent implements OnInit {
     const userId = this.localStorageService.get('user_id');
 
     if (userId) {
-      this.loaderService.show();
-
       this.adminService.getAdminById(userId).subscribe(
         (userData: AdminDTO) => {
           this.name.setValue(userData.name);
@@ -114,12 +112,10 @@ export class ProfileComponent implements OnInit {
             email: this.email,
             alias: this.alias,
           });
-          this.loaderService.hide();
         },
         (error: HttpErrorResponse) => {
           errorResponse = error.error;
           this.sharedService.errorLog(errorResponse);
-          this.loaderService.hide();
         }
       );
     }

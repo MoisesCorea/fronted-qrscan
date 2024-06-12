@@ -23,6 +23,9 @@ import { UserDTO } from './Models/user.dto';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  observe(arg0: string[]) {
+    throw new Error('Method not implemented.');
+  }
   title = 'QrScan';
   loading = false;
 
@@ -68,7 +71,6 @@ export class AppComponent {
       return this.cachedAdmins[adminId];
     } else {
       const admins$ = this.adminService.getAdminById(adminId).pipe(
-        tap(() => console.log('Obteniendo nombre del rol')),
         map((admin: AdminDTO) => {
           return admin.alias;
         }),

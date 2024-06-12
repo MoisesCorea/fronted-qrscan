@@ -19,20 +19,12 @@ h2 {
 }
 
 .fixed-button {
-  position: fixed;
-  top: 70px;
-  left: 75px;
+  position: relative;
+  margin-top: 50%;
+  top: -8px;
+  left: 0;
   z-index: 1050;
   transition: right 0.3s ease;
-}
-
-.fixed-button.active {
-  left: 250px;
-}
-
-.fixed-button.mobile {
-  top: 50px;
-  left: 0px;
 }
 
 mat-toolbar {

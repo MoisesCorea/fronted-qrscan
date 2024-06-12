@@ -1,3 +1,7 @@
+.paginador ::ng-deep .ngx-pagination .current {
+  background: #1e3148;
+}
+
 @media print {
   .card {
     page-break-inside: avoid;

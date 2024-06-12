@@ -69,9 +69,7 @@ export class AdminListComponent {
       return this.cachedRoles[rol_id];
     } else {
       const role$ = this.rolesService.getRolById(rol_id).pipe(
-        tap(() => console.log('Obteniendo nombre del rol')),
         map((rol: RolesDTO) => {
-          console.log('Rol obtenido:', rol);
           return rol.name;
         }),
         catchError((error) => {

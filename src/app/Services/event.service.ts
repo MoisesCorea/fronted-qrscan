@@ -63,12 +63,7 @@ export class EventService {
         this.urlQrScanApi + '/' + eventId + '/status',
         eventStatus
       )
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          console.log('Registro completado:', result);
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 
   toggleEventDailyAttendance(
@@ -82,11 +77,6 @@ export class EventService {
         this.urlQrScanApi + '/' + eventId + '/daily-attendance',
         eventStatus
       )
-      .pipe(
-        catchError(this.sharedService.handleError),
-        tap((result) => {
-          console.log('Registro completado:', result);
-        })
-      );
+      .pipe(catchError(this.sharedService.handleError));
   }
 }

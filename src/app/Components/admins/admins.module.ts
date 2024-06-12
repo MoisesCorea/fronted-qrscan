@@ -6,6 +6,7 @@ import { AdminFormComponent } from './admin-form/admin-form.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AdminsRoutingModule } from './admins-routing.module';
 import { SharedModule } from 'src/app/Shared/shared.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AdminFormComponent, AdminListComponent],
@@ -16,6 +17,7 @@ import { SharedModule } from 'src/app/Shared/shared.module';
     ReactiveFormsModule,
     NgxPaginationModule,
     SharedModule,
+    MatSnackBarModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './Guards/auth.guard';
+import { BreadcrumbsComponent } from './Shared/breadcrumbs/breadcrumbs.component';
 
 const routes: Routes = [
   {
     path: '',
+    data: { breadcrumb: 'home' },
     loadChildren: () =>
       import('./Components/home/home.module').then((m) => m.HomeModule),
   },
@@ -16,6 +18,7 @@ const routes: Routes = [
   {
     path: 'admins',
     data: {
+      breadcrumb: 'admins',
       allowedRoles: ['Admin'],
     },
     loadChildren: () =>
@@ -26,6 +29,7 @@ const routes: Routes = [
   {
     path: 'roles',
     data: {
+      breadcrumb: 'roles',
       allowedRoles: ['Admin'],
     },
     loadChildren: () =>
@@ -35,6 +39,7 @@ const routes: Routes = [
   {
     path: 'departamentos',
     data: {
+      breadcrumb: 'departamentos',
       allowedRoles: ['Admin', 'Admin-1'],
     },
     loadChildren: () =>
@@ -47,6 +52,7 @@ const routes: Routes = [
   {
     path: 'eventos',
     data: {
+      breadcrumb: 'eventos',
       allowedRoles: ['Admin', 'Admin-1'],
     },
     loadChildren: () =>
@@ -56,6 +62,7 @@ const routes: Routes = [
   {
     path: 'horarios',
     data: {
+      breadcrumb: 'horarios',
       allowedRoles: ['Admin', 'Admin-1'],
     },
     loadChildren: () =>
@@ -66,6 +73,7 @@ const routes: Routes = [
   {
     path: 'usuarios',
     data: {
+      breadcrumb: 'usuarios',
       allowedRoles: ['Admin', 'Admin-1'],
     },
     loadChildren: () =>
@@ -75,6 +83,7 @@ const routes: Routes = [
   {
     path: 'reporte',
     data: {
+      breadcrumb: 'reporte',
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
     loadChildren: () =>
@@ -85,12 +94,14 @@ const routes: Routes = [
   },
   {
     path: 'home',
+    data: { breadcrumb: 'home' },
     loadChildren: () =>
       import('./Components/home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'dashboard',
     data: {
+      breadcrumb: 'dashboard',
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
     loadChildren: () =>
@@ -103,6 +114,7 @@ const routes: Routes = [
   {
     path: 'perfil',
     data: {
+      breadcrumb: 'perfil',
       allowedRoles: ['Admin', 'Admin-1', 'Admin-2'],
     },
     loadChildren: () =>
@@ -110,13 +122,6 @@ const routes: Routes = [
         (m) => m.ProfileModule
       ),
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'reporte',
-    loadChildren: () =>
-      import('./Components/reports/reports.module').then(
-        (m) => m.ReportsModule
-      ),
   },
 ];
 

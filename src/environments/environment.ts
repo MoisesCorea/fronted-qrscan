@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://qrsacan-uoc-d7650263c90c.herokuapp.com/public/api/',
-  apiUrlShort: 'https://qrsacan-uoc-d7650263c90c.herokuapp.com/public/',
+  apiUrl: 'https://www.qrsacan-uoc.shop/api/',
 };
 
 /*

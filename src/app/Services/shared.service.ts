@@ -33,6 +33,7 @@ export class SharedService {
           '<p>' +
           response.message;
         +'</p>';
+        this.scrollToTop();
         await this.wait(2500);
         toastMsg.className = toastMsg.className.replace('show', '');
       } else {
@@ -52,8 +53,8 @@ export class SharedService {
               ? `<p>Detalles: ${error.messageDetail}</p>`
               : ''
           }`;
-
-        await this.wait(2500);
+        this.scrollToTop();
+        await this.wait(3500);
         toastMsg.className = toastMsg.className.replace('show', '');
       }
     }
@@ -75,5 +76,12 @@ export class SharedService {
 
   handleError(error: HttpErrorResponse) {
     return throwError(error);
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
 }

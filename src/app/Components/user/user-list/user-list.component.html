@@ -1,9 +1,10 @@
 <app-alert></app-alert>
+<app-breadcrumbs></app-breadcrumbs>
 <div class="container-main mb-5">
   <div class="row mt-3 justify-content-center">
     <div class="col">
       <div class="table table-responsive mx-3">
-        <h2 class="text-center">Lista de usuarios</h2>
+        <h2 class="text-center">Usuarios</h2>
         <button class="btn btn-primary addBtn" (click)="createUser()">
           AGREGAR <i class="fa-solid fa-plus"></i>
         </button>
@@ -70,7 +71,7 @@
         </table>
       </div>
       <pagination-controls
-        class="text-center mb-5 mt-5"
+        class="paginador text-center mb-5 mt-5"
         (pageChange)="page = $event"
         previousLabel="Aterior"
         nextLabel="Siguiente"

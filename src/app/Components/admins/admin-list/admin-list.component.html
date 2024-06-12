@@ -1,9 +1,10 @@
 <app-alert></app-alert>
+<app-breadcrumbs></app-breadcrumbs>
 <div class="container-main">
   <div class="row mt-5 justify-content-center">
     <div class="col">
       <div class="table-responsive mx-3">
-        <h2 class="text-center">Lista de administradores</h2>
+        <h2 class="text-center">Administradores</h2>
         <button class="btn btn-primary addBtn mt-6" (click)="createAdmin()">
           AGREGAR <i class="fa-solid fa-plus"></i>
         </button>
@@ -62,7 +63,7 @@
         </table>
       </div>
       <pagination-controls
-        class="text-center mb-5 mt-5"
+        class="paginador text-center mb-5 mt-5"
         (pageChange)="page = $event"
         previousLabel="Aterior"
         nextLabel="Siguiente"

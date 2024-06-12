@@ -4,9 +4,10 @@ import { EventListComponent } from './event-list/event-list.component';
 import { EventFormComponent } from './event-form/event-form.component';
 
 const routes: Routes = [
-  { path: '', component: EventListComponent },
+  { path: '', data: { breadcrumb: 'eventos' }, component: EventListComponent },
   {
     path: 'item/:id',
+    data: { breadcrumb: 'formulario' },
     component: EventFormComponent,
   },
 ];
