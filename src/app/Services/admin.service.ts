@@ -54,7 +54,7 @@ export class AdminService {
 
   changePassword(password: any): Observable<any> {
     return this.http
-      .post<AdminDTO>('change-password', password)
+      .post<AdminDTO>(environment.apiUrl + 'change-password', password)
       .pipe(catchError(this.sharedService.handleError));
   }
 }
