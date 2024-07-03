@@ -62,6 +62,7 @@
     [mode]="isMobile ? 'over' : 'side'"
     [opened]="isMobile ? 'false' : 'true'"
   >
+    <hr class="my-0 mx-3 mb-4" style="color: white" />
     <mat-nav-list>
       <!-- NO AUTH REQUIRED -->
       <div
@@ -172,6 +173,17 @@
         </mat-menu>
       </div>
     </mat-nav-list>
+    <hr class="mx-3 mt-5" style="color: white" />
+    <div *ngIf="isCollapsed" class="information">
+      <p><b>Desarrollado por: </b> Moises Corea Villanueva</p>
+      <p>
+        <b>email: </b
+        ><a href="mailto:moises.corea15@gmail.com"
+          >mosies.corea15&#64;gmail.com</a
+        >
+      </p>
+      <p>2024 - copyright&copy;</p>
+    </div>
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>

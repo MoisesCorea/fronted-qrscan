@@ -109,15 +109,18 @@
         <div class="col-md-6" *ngIf="reportData.daily_attendance === 'Si'">
           <p>
             <strong>Tiempo No Dedicado (Total):</strong>
-            {{ reportData.total_non_didicated_time.toFixed(2) / 60 }} horas /
-            {{ reportData.total_non_didicated_time }} minutos
+            {{
+              (reportData.total_non_didicated_time.toFixed(0) / 60).toFixed(0)
+            }}
+            horas / {{ reportData.total_non_didicated_time }} minutos
           </p>
         </div>
         <div class="col-md-6">
           <p>
             <strong>Tiempo Dedicado (Total):</strong>
-            {{ reportData.total_dedicated_hours.toFixed(2) }} horas /
-            {{ reportData.total_dedicated_hours.toFixed(2) * 60 }} minutos
+            {{ reportData.total_dedicated_hours.toFixed(0) }} horas /
+            {{ (reportData.total_dedicated_hours.toFixed(0) * 60).toFixed(0) }}
+            minutos
           </p>
         </div>
       </div>
